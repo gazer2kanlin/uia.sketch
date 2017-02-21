@@ -99,10 +99,14 @@ public class PhotoPanel extends JPanel {
         return this.file == null ? false : loadImage(this.file);
     }
 
-    public void clearImage() {
+    public void reset() {
         this.file = null;
         this.origImage = null;
         this.backgroundImage = null;
+        this.firstGridDrawer.reset();
+        this.firstGridDrawer.setEnabled(true);
+        this.secondGridDrawer.reset();
+        this.secondGridDrawer.setEnabled(false);
         repaint();
     }
 

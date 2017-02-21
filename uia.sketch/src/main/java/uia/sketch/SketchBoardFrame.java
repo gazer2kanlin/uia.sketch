@@ -160,7 +160,12 @@ public class SketchBoardFrame extends JFrame {
         this.menuBar.add(this.fileMenu);
 
         this.newMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.New"));
-        this.newMenuItem.addActionListener(evt -> this.filePanel.newSketchBook());
+        this.newMenuItem.addActionListener(evt -> {
+            this.controlPanel.reset();
+            this.photoPanel.reset();
+
+            this.filePanel.newSketchBook();
+        });
         this.fileMenu.add(this.newMenuItem);
 
         this.openMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Open"));

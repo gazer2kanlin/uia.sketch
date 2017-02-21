@@ -49,6 +49,14 @@ public class GridDrawer {
         this.enabled = enabled;
     }
 
+    public void reset() {
+        this.width = 40;
+        this.lineColor = Color.gray;
+        this.offset = new Point(0, 0);
+        this.degree = 0;
+        this.enabled = true;
+    }
+
     /**
      * Get the degree.
      * @return Degree.

@@ -137,7 +137,7 @@ public class ControlPanel extends JPanel {
 
         this.gridWidthUpButton = new JButton("");
         this.gridWidthUpButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "zoom_p.png")));
-        this.gridWidthUpButton.setToolTipText("Reset degree to zero.");
+        this.gridWidthUpButton.setToolTipText("Zoom in");
         this.gridWidthUpButton.setBounds(176, 202, 16, 16);
         this.gridWidthUpButton.addActionListener(evt -> {
             int value = this.gridWidthSlider.getValue() * 2;
@@ -149,7 +149,7 @@ public class ControlPanel extends JPanel {
 
         this.gridWidthDownButton = new JButton("");
         this.gridWidthDownButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "zoom_m.png")));
-        this.gridWidthDownButton.setToolTipText("Reset degree to zero.");
+        this.gridWidthDownButton.setToolTipText("Zoom out");
         this.gridWidthDownButton.setBounds(194, 202, 16, 16);
         this.gridWidthDownButton.addActionListener(evt -> {
             int value = this.gridWidthSlider.getValue() / 2;
@@ -263,6 +263,7 @@ public class ControlPanel extends JPanel {
         add(visibleLabel);
 
         this.visible1Button = new JToggleButton(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("grid.First"));
+        this.visible1Button.setSelected(true);
         this.visible1Button.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "p1.png")));
         this.visible1Button.setBounds(10, 413, 96, 23);
         this.visible1Button.addActionListener(evt -> {
@@ -326,7 +327,18 @@ public class ControlPanel extends JPanel {
         this.allowApply = true;
 
         this.dragPhotoButton.setSelected(true);
-        enableGridFuncs(false);
+        enableGridFocus(false);
+    }
+
+    public void reset() {
+        this.dragPhotoButton.setSelected(true);
+        this.visible1Button.setSelected(true);
+        this.visible2Button.setSelected(false);
+        this.phZoomSlider.setValue(10);
+        this.gridDegreeSlider.setValue(0);
+
+        load(null);
+        enableGridFocus(false);
     }
 
     /**
@@ -336,7 +348,7 @@ public class ControlPanel extends JPanel {
     public void load(PhotoFile pf) {
         this.pf = pf;
         if (this.pf == null) {
-            this.mainFrame.getPhotoPanel().clearImage();
+            this.mainFrame.getPhotoPanel().reset();
             setEnabled(false);
             return;
         }
@@ -376,7 +388,7 @@ public class ControlPanel extends JPanel {
 
         applyFrom(this.mainFrame.getPhotoPanel().getSelectedGridDrawer());
 
-        enableGridFuncs(!this.dragPhotoButton.isSelected());
+        enableGridFocus(!this.dragPhotoButton.isSelected());
 
         this.allowApply = true;
 
@@ -391,6 +403,10 @@ public class ControlPanel extends JPanel {
     }
 
     private void apply() {
+        if (this.pf == null) {
+            return;
+        }
+
         if (this.allowApply) {
             this.pf.config.setZoom(this.phZoomSlider.getValue() / 10d);
             this.pf.config.setViewWidth(this.mainFrame.getPhotoPanel().getViewWidth());
@@ -432,7 +448,7 @@ public class ControlPanel extends JPanel {
     }
 
     private void dragModeChanged() {
-        enableGridFuncs(!this.dragPhotoButton.isSelected());
+        enableGridFocus(!this.dragPhotoButton.isSelected());
         if (this.dragGrid1Button.isSelected()) {
             this.mainFrame.getPhotoPanel().setDragMode(DragTargetType.GRID1);
             this.mainFrame.getPhotoPanel().selectFirstGridDrawer();
@@ -453,7 +469,7 @@ public class ControlPanel extends JPanel {
         apply();
     }
 
-    private void enableGridFuncs(boolean enabled) {
+    private void enableGridFocus(boolean enabled) {
         this.gridWidthUpButton.setEnabled(enabled);
         this.gridWidthDownButton.setEnabled(enabled);
         this.gridWidthSlider.setEnabled(enabled);
