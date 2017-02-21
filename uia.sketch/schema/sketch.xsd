@@ -8,6 +8,8 @@
     <element name="sketchBook" type="uia:SketchBookType" nillable="true" />
     <complexType name="SketchBookType" mixed="false">
         <sequence>
+            <element name="x" type="int" default="0"></element>
+            <element name="y" type="int" default="0"></element>
             <element name="width" type="int"></element>
             <element name="height" type="int"></element>
             <element name="photoList" type="uia:PhotoListType"></element>

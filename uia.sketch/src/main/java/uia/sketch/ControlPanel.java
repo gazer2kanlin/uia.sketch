@@ -2,10 +2,8 @@ package uia.sketch;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.ResourceBundle;
 
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
@@ -74,8 +72,8 @@ public class ControlPanel extends JPanel {
 
         // Photo
         /**
-        this.phFileButton = new JButton(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("photo.Select"));
-        this.phFileButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "file.png")));
+        this.phFileButton = new JButton(Constants.getString("photo.Select"));
+        this.phFileButton.setIcon(Constants.getImageIcon("file.png"));
         this.phFileButton.setBounds(10, 10, 200, 23);
         this.phFileButton.setVisible(false);
         this.phFileButton.addActionListener(evt -> {
@@ -87,26 +85,26 @@ public class ControlPanel extends JPanel {
                 this.mainFrame.getPhotoPanel().loadImage(this.lastFile);
                 this.mainFrame.getStatusPanel().setFileName(this.lastFile.getAbsolutePath());
                 this.phZoomSlider.setValue(10);
-        
+
                 this.pf.config.setName(this.lastFile.getName());
                 this.pf.config.setPath(this.lastFile.getAbsolutePath());
                 this.pf.config.setZoom(1.0);
                 this.pf.config.setViewWidth(this.mainFrame.getPhotoPanel().getViewWidth());
                 this.pf.config.setViewHeight(this.mainFrame.getPhotoPanel().getViewHeight());
             }
-        
+
         });
         add(this.phFileButton);
         */
 
         // Zoom
-        JLabel phZoomLabel = new JLabel(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("photo.Zoom"));
-        phZoomLabel.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "zoom.png")));
+        JLabel phZoomLabel = new JLabel(Resources.getString("photo.Zoom"));
+        phZoomLabel.setIcon(Resources.getImageIcon("zoom.png"));
         phZoomLabel.setBounds(10, 10, 90, 15);
         add(phZoomLabel);
 
         this.phZoomButton = new JButton("");
-        this.phZoomButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "cancel.png")));
+        this.phZoomButton.setIcon(Resources.getImageIcon("cancel.png"));
         this.phZoomButton.setToolTipText("Reset zoom to 1:1");
         this.phZoomButton.setBounds(194, 10, 16, 16);
         this.phZoomButton.addActionListener(evt -> {
@@ -130,13 +128,13 @@ public class ControlPanel extends JPanel {
         add(this.phZoomSlider);
 
         // Grid> Width
-        JLabel gridWidthLabel = new JLabel(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("grid.Width"));
-        gridWidthLabel.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "grid.png")));
+        JLabel gridWidthLabel = new JLabel(Resources.getString("grid.Width"));
+        gridWidthLabel.setIcon(Resources.getImageIcon("grid.png"));
         gridWidthLabel.setBounds(10, 202, 90, 15);
         add(gridWidthLabel);
 
         this.gridWidthUpButton = new JButton("");
-        this.gridWidthUpButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "zoom_p.png")));
+        this.gridWidthUpButton.setIcon(Resources.getImageIcon("zoom_p.png"));
         this.gridWidthUpButton.setToolTipText("Zoom in");
         this.gridWidthUpButton.setBounds(176, 202, 16, 16);
         this.gridWidthUpButton.addActionListener(evt -> {
@@ -148,7 +146,7 @@ public class ControlPanel extends JPanel {
         add(this.gridWidthUpButton);
 
         this.gridWidthDownButton = new JButton("");
-        this.gridWidthDownButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "zoom_m.png")));
+        this.gridWidthDownButton.setIcon(Resources.getImageIcon("zoom_m.png"));
         this.gridWidthDownButton.setToolTipText("Zoom out");
         this.gridWidthDownButton.setBounds(194, 202, 16, 16);
         this.gridWidthDownButton.addActionListener(evt -> {
@@ -173,13 +171,13 @@ public class ControlPanel extends JPanel {
         add(this.gridWidthSlider);
 
         // Grid> Degree
-        JLabel gridDegreeLabel = new JLabel(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("grid.Degree"));
-        gridDegreeLabel.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "line_degree.png")));
+        JLabel gridDegreeLabel = new JLabel(Resources.getString("grid.Degree"));
+        gridDegreeLabel.setIcon(Resources.getImageIcon("line_degree.png"));
         gridDegreeLabel.setBounds(10, 260, 90, 15);
         add(gridDegreeLabel);
 
         this.gridDegreeButton = new JButton("");
-        this.gridDegreeButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "cancel.png")));
+        this.gridDegreeButton.setIcon(Resources.getImageIcon("cancel.png"));
         this.gridDegreeButton.setToolTipText("Reset degree to zero.");
         this.gridDegreeButton.setBounds(194, 260, 16, 16);
         this.gridDegreeButton.addActionListener(evt -> {
@@ -204,13 +202,13 @@ public class ControlPanel extends JPanel {
         add(this.gridDegreeSlider);
 
         // Grid> Line Color
-        JLabel colorLabel = new JLabel(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("grid.LineColor"));
-        colorLabel.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "line_color.png")));
+        JLabel colorLabel = new JLabel(Resources.getString("grid.LineColor"));
+        colorLabel.setIcon(Resources.getImageIcon("line_color.png"));
         colorLabel.setBounds(10, 318, 128, 15);
         add(colorLabel);
 
         this.colorButton = new JButton("");
-        this.colorButton.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "color-picker.png")));
+        this.colorButton.setIcon(Resources.getImageIcon("color-picker.png"));
         this.colorButton.setToolTipText("Choose grid line color");
         this.colorButton.setOpaque(true);
         this.colorButton.setBounds(10, 343, 23, 23);
@@ -228,24 +226,24 @@ public class ControlPanel extends JPanel {
         add(this.colorButton);
 
         // Drag
-        JLabel dragModeLabel = new JLabel(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("drag.Name"));
-        dragModeLabel.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "drag.png")));
+        JLabel dragModeLabel = new JLabel(Resources.getString("drag.Name"));
+        dragModeLabel.setIcon(Resources.getImageIcon("drag.png"));
         dragModeLabel.setBounds(10, 87, 90, 15);
         add(dragModeLabel);
 
-        this.dragPhotoButton = new JRadioButton(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("drag.Photo"));
+        this.dragPhotoButton = new JRadioButton(Resources.getString("drag.Photo"));
         this.dragPhotoButton.setSelected(true);
         this.dragPhotoButton.setEnabled(false);
         this.dragPhotoButton.setBounds(10, 108, 90, 23);
         this.dragPhotoButton.addActionListener(evt -> dragModeChanged());
         add(this.dragPhotoButton);
 
-        this.dragGrid1Button = new JRadioButton(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("drag.Grid1"));
+        this.dragGrid1Button = new JRadioButton(Resources.getString("drag.Grid1"));
         this.dragGrid1Button.setBounds(10, 133, 90, 23);
         this.dragGrid1Button.addActionListener(evt -> dragModeChanged());
         add(this.dragGrid1Button);
 
-        this.dragGrid2Button = new JRadioButton(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("drag.Grid2"));
+        this.dragGrid2Button = new JRadioButton(Resources.getString("drag.Grid2"));
         this.dragGrid2Button.setEnabled(false);
         this.dragGrid2Button.setBounds(114, 133, 90, 23);
         this.dragGrid2Button.addActionListener(evt -> dragModeChanged());
@@ -257,14 +255,14 @@ public class ControlPanel extends JPanel {
         bg.add(this.dragGrid2Button);
 
         // Visible
-        JLabel visibleLabel = new JLabel(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("grid.Visible"));
-        visibleLabel.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "visible.png")));
+        JLabel visibleLabel = new JLabel(Resources.getString("grid.Visible"));
+        visibleLabel.setIcon(Resources.getImageIcon("visible.png"));
         visibleLabel.setBounds(10, 388, 90, 15);
         add(visibleLabel);
 
-        this.visible1Button = new JToggleButton(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("grid.First"));
+        this.visible1Button = new JToggleButton(Resources.getString("grid.First"));
         this.visible1Button.setSelected(true);
-        this.visible1Button.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "p1.png")));
+        this.visible1Button.setIcon(Resources.getImageIcon("p1.png"));
         this.visible1Button.setBounds(10, 413, 96, 23);
         this.visible1Button.addActionListener(evt -> {
             this.mainFrame.getPhotoPanel().getFirstGridDrawer().setEnabled(this.visible1Button.isSelected());
@@ -272,8 +270,8 @@ public class ControlPanel extends JPanel {
         });
         add(this.visible1Button);
 
-        this.visible2Button = new JToggleButton(ResourceBundle.getBundle(Constants.I18N + "sketch", SketchBoardFrame.LOCALE).getString("grid.Second"));
-        this.visible2Button.setIcon(new ImageIcon(SketchBoardFrame.class.getResource(Constants.IMAGES + "p2.png")));
+        this.visible2Button = new JToggleButton(Resources.getString("grid.Second"));
+        this.visible2Button.setIcon(Resources.getImageIcon("p2.png"));
         this.visible2Button.setBounds(114, 413, 96, 23);
         this.visible2Button.addActionListener(evt -> {
             this.mainFrame.getPhotoPanel().getSecondGridDrawer().setEnabled(this.visible2Button.isSelected());
@@ -341,11 +339,15 @@ public class ControlPanel extends JPanel {
         enableGridFocus(false);
     }
 
+    public void loadAsync(final PhotoFile pf) {
+        new Thread(() -> load(pf)).start();
+    }
+
     /**
      * Load photo file.
      * @param pf Photo file.
      */
-    public void load(PhotoFile pf) {
+    public synchronized void load(PhotoFile pf) {
         this.pf = pf;
         if (this.pf == null) {
             this.mainFrame.getPhotoPanel().reset();

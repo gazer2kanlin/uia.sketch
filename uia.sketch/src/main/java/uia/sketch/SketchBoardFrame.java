@@ -3,12 +3,13 @@ package uia.sketch;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.Enumeration;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.FontUIResource;
 
 /**
  *
@@ -28,10 +30,6 @@ import javax.swing.filechooser.FileFilter;
  *
  */
 public class SketchBoardFrame extends JFrame {
-
-    static Locale LOCALE = Locale.TAIWAN;
-
-    static final String TITLE = ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("app.Name");
 
     private static final long serialVersionUID = -7449421668829108966L;
 
@@ -85,24 +83,26 @@ public class SketchBoardFrame extends JFrame {
         try {
             if (args.length > 0) {
                 Locale.setDefault(new Locale(args[0]));
-                LOCALE = Locale.getDefault();
+                Resources.LOCALE = Locale.getDefault();
             }
 
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            /**
-            FontUIResource f = new FontUIResource(new Font("Tahoma", Font.PLAIN, 11));
-            Enumeration<Object> keys = UIManager.getDefaults().keys();
-            while (keys.hasMoreElements()) {
-                Object key = keys.nextElement();
-                Object value = UIManager.get(key);
-                if (value instanceof FontUIResource) {
-                    UIManager.put(key, f);
+            if (Resources.LOCALE != Locale.TAIWAN && Resources.LOCALE != Locale.TRADITIONAL_CHINESE) {
+                FontUIResource f = new FontUIResource(new Font("Tahoma", Font.PLAIN, 11));
+                Enumeration<Object> keys = UIManager.getDefaults().keys();
+                while (keys.hasMoreElements()) {
+                    Object key = keys.nextElement();
+                    Object value = UIManager.get(key);
+                    if (value instanceof FontUIResource) {
+                        UIManager.put(key, f);
+                    }
                 }
             }
-            */
         }
         catch (Exception ex) {
         }
+
+        Resources.TITLE = Resources.getString("app.Name");
 
         new SketchBoardFrame().setVisible(true);
     }
@@ -111,11 +111,12 @@ public class SketchBoardFrame extends JFrame {
      *
      */
     public SketchBoardFrame() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(SketchBoardFrame.class.getResource(Constants.IMAGES + "sketch.png")));
-        setSize(1080, 600);
-        this.setMinimumSize(new Dimension(1080, 600));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(Resources.getImageURL("sketch.png")));
+        setSize(980, 600);
+        setLocation(100, 100);
+        setMinimumSize(new Dimension(980, 600));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle(TITLE + " - New");
+        setTitle(Resources.TITLE + " - " + Resources.getString("text.NoName"));
         addWindowListener(new WindowAdapter() {
 
             @Override
@@ -156,10 +157,10 @@ public class SketchBoardFrame extends JFrame {
         setJMenuBar(this.menuBar);
 
         // Menu Bar> File
-        this.fileMenu = new JMenu(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.File"));
+        this.fileMenu = new JMenu(Resources.getString("menu.File"));
         this.menuBar.add(this.fileMenu);
 
-        this.newMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.New"));
+        this.newMenuItem = new JMenuItem(Resources.getString("menu.New"));
         this.newMenuItem.addActionListener(evt -> {
             this.controlPanel.reset();
             this.photoPanel.reset();
@@ -168,7 +169,7 @@ public class SketchBoardFrame extends JFrame {
         });
         this.fileMenu.add(this.newMenuItem);
 
-        this.openMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Open"));
+        this.openMenuItem = new JMenuItem(Resources.getString("menu.Open"));
         this.openMenuItem.addActionListener(evt -> {
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new FileFilter() {
@@ -194,11 +195,11 @@ public class SketchBoardFrame extends JFrame {
         });
         this.fileMenu.add(this.openMenuItem);
 
-        this.saveMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Save"));
+        this.saveMenuItem = new JMenuItem(Resources.getString("menu.Save"));
         this.saveMenuItem.addActionListener(evt -> this.filePanel.saveSketchBook(this.lastFile));
         this.fileMenu.add(this.saveMenuItem);
 
-        this.saveAsMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.SaveAs"));
+        this.saveAsMenuItem = new JMenuItem(Resources.getString("menu.SaveAs"));
         this.saveAsMenuItem.addActionListener(evt -> {
             JFileChooser fc = new JFileChooser();
             fc.setCurrentDirectory(this.lastFile);
@@ -225,41 +226,41 @@ public class SketchBoardFrame extends JFrame {
         this.fileMenu.add(this.saveAsMenuItem);
         this.fileMenu.addSeparator();
 
-        this.addMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Add"));
+        this.addMenuItem = new JMenuItem(Resources.getString("menu.Add"));
         this.addMenuItem.addActionListener(evt -> this.filePanel.addPhoto());
         this.fileMenu.add(this.addMenuItem);
 
-        this.deleteMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Delete"));
+        this.deleteMenuItem = new JMenuItem(Resources.getString("menu.Delete"));
         this.deleteMenuItem.addActionListener(evt -> this.filePanel.deletePhoto());
         this.fileMenu.add(this.deleteMenuItem);
 
-        this.clearMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Clear"));
+        this.clearMenuItem = new JMenuItem(Resources.getString("menu.Clear"));
         this.clearMenuItem.addActionListener(evt -> {
             this.filePanel.clearPhotos();
         });
         this.fileMenu.add(this.clearMenuItem);
         this.fileMenu.addSeparator();
 
-        this.exitMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Exit"));
+        this.exitMenuItem = new JMenuItem(Resources.getString("menu.Exit"));
         this.exitMenuItem.addActionListener(evt -> System.exit(0));
         this.fileMenu.add(this.exitMenuItem);
 
-        this.editMenu = new JMenu(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Edit"));
+        this.editMenu = new JMenu(Resources.getString("menu.Edit"));
         this.menuBar.add(this.editMenu);
 
-        this.undoMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Undo"));
+        this.undoMenuItem = new JMenuItem(Resources.getString("menu.Undo"));
         this.undoMenuItem.setEnabled(false);
         this.editMenu.add(this.undoMenuItem);
 
-        this.redoMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Redo"));
+        this.redoMenuItem = new JMenuItem(Resources.getString("menu.Redo"));
         this.redoMenuItem.setEnabled(false);
         this.editMenu.add(this.redoMenuItem);
 
         // Menu Bar> Help
-        this.helpMenu = new JMenu(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.Help"));
+        this.helpMenu = new JMenu(Resources.getString("menu.Help"));
         this.menuBar.add(this.helpMenu);
 
-        this.aboutMenuItem = new JMenuItem(ResourceBundle.getBundle(Constants.I18N + "sketch", LOCALE).getString("menu.About"));
+        this.aboutMenuItem = new JMenuItem(Resources.getString("menu.About"));
         this.helpMenu.add(this.aboutMenuItem);
 
     }

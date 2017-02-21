@@ -2,6 +2,8 @@ package uia.sketch;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.DefaultListModel;
@@ -47,7 +49,16 @@ public class FileNaviPanel extends JPanel {
                 this.mainFrame.getStatusPanel().setFileName(this.selectedFile.config.getPath());
             }
 
-            this.mainFrame.getControlPanel().load(this.selectedFile);
+            this.mainFrame.getControlPanel().loadAsync(this.selectedFile);
+        });
+        this.fileList.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+                    changeName();
+                }
+            }
         });
         add(this.fileList, BorderLayout.CENTER);
     }
@@ -66,16 +77,19 @@ public class FileNaviPanel extends JPanel {
 
     void newSketchBook() {
         this.photoModel.clear();
-        this.mainFrame.setTitle(SketchBoardFrame.TITLE + " - New");
+        this.mainFrame.setTitle(Resources.TITLE + " - " + Resources.getString("text.NoName"));
+
     }
 
     void openSketchBook(File file) {
         try {
             this.photoModel.clear();
-            this.mainFrame.setTitle(SketchBoardFrame.TITLE + " - " + file.getAbsolutePath());
+            this.mainFrame.setTitle(Resources.TITLE + " - " + file.getAbsolutePath());
 
             SketchBookType book = SketchBookTypeHelper.load(file);
-            // window size
+            // location
+            this.mainFrame.setLocation(book.getX(), book.getY());
+            // size
             this.mainFrame.setSize(new Dimension(book.getWidth(), book.getHeight()));
             // photo list
             book.getPhotoList().getPhoto().stream().forEach(p -> {
@@ -107,7 +121,7 @@ public class FileNaviPanel extends JPanel {
                 book.getPhotoList().getPhoto().add(photo);
             }
             SketchBookTypeHelper.save(book, file);
-            this.mainFrame.setTitle(SketchBoardFrame.TITLE + " - " + file.getAbsolutePath());
+            this.mainFrame.setTitle(Resources.TITLE + " - " + file.getAbsolutePath());
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -136,6 +150,16 @@ public class FileNaviPanel extends JPanel {
         }
         else {
 
+        }
+    }
+
+    void changeName() {
+        Object aliasName = JOptionPane.showInputDialog(
+                getMainFrame(),
+                "Name",
+                this.selectedFile.config.getName());
+        if (aliasName != null) {
+            this.selectedFile.config.setName(aliasName.toString());
         }
     }
 
