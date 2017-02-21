@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:uia="http://sketch.uia/model/xml"
+        targetNamespace="http://sketch.uia/model/xml"
+        elementFormDefault="qualified"
+        version="1.0">
+    
+    <element name="sketchBook" type="uia:SketchBookType" nillable="true" />
+    <complexType name="SketchBookType" mixed="false">
+        <sequence>
+            <element name="width" type="int"></element>
+            <element name="height" type="int"></element>
+            <element name="photoList" type="uia:PhotoListType"></element>
+        </sequence>
+    </complexType>
+
+    <complexType name="PhotoListType">
+        <sequence>
+            <element name="photo" type="uia:PhotoType" maxOccurs="unbounded" minOccurs="0"></element>
+        </sequence>
+    </complexType>
+    <complexType name="PhotoType">
+        <sequence>
+            <element name="name" type="string" default="Undefined"></element>
+            <element name="path" type="string"></element>
+            <element name="zoom" type="double" default="1.0"></element>
+            <element name="viewWidth" type="int"></element>
+            <element name="viewHeight" type="int"></element>
+            <element name="offset" type="string" default="0,0"></element>
+            <element name="dragTarget" type="string" default="PHOTO"></element>
+            <element name="grids" type="uia:GridListType"></element>
+        </sequence>
+    </complexType>
+
+    <complexType name="GridListType">
+        <sequence>
+            <element name="grid" type="uia:GridType" maxOccurs="unbounded" minOccurs="1"></element>
+        </sequence>
+    </complexType>
+    <complexType name="GridType">
+        <sequence>
+            <element name="offset" type="string" default="0,0"></element>
+            <element name="width" type="int" default="40"></element>
+            <element name="degree" type="int"></element>
+            <element name="lineColor" type="string" default="128,128,128"></element>
+            <element name="enabled" type="boolean" default="true"></element>
+        </sequence>
+    </complexType>
+</schema>
