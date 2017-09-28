@@ -85,14 +85,14 @@ public class ControlPanel extends JPanel {
                 this.mainFrame.getPhotoPanel().loadImage(this.lastFile);
                 this.mainFrame.getStatusPanel().setFileName(this.lastFile.getAbsolutePath());
                 this.phZoomSlider.setValue(10);
-
+        
                 this.pf.config.setName(this.lastFile.getName());
                 this.pf.config.setPath(this.lastFile.getAbsolutePath());
                 this.pf.config.setZoom(1.0);
                 this.pf.config.setViewWidth(this.mainFrame.getPhotoPanel().getViewWidth());
                 this.pf.config.setViewHeight(this.mainFrame.getPhotoPanel().getViewHeight());
             }
-
+        
         });
         add(this.phFileButton);
         */
@@ -219,7 +219,7 @@ public class ControlPanel extends JPanel {
                     this.mainFrame.getPhotoPanel().getSelectedGridDrawer().getLineColor());
             if (newColor != null) {
                 this.colorButton.setBackground(newColor);
-                this.mainFrame.getPhotoPanel().getSelectedGridDrawer().setLineColor(newColor);;
+                this.mainFrame.getPhotoPanel().getSelectedGridDrawer().setLineColor(newColor);
                 apply();
             }
         });

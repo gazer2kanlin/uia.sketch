@@ -311,13 +311,6 @@ public class PhotoPanel extends JPanel {
         private int y;
 
         @Override
-        public void mouseClicked(MouseEvent evt) {
-            if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
-                // lock photo?
-            }
-        }
-
-        @Override
         public void mousePressed(MouseEvent evt) {
             if (PhotoPanel.this.selectedGridDrawer == null) {
                 return;

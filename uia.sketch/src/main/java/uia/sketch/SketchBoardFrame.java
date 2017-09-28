@@ -230,7 +230,7 @@ public class SketchBoardFrame extends JFrame {
         this.fileMenu.addSeparator();
 
         this.exitMenuItem = new JMenuItem(Resources.getString("menu.Exit"));
-        this.exitMenuItem.addActionListener(evt -> System.exit(0));
+        this.exitMenuItem.addActionListener(evt -> SketchBoardFrame.this.dispose());
         this.fileMenu.add(this.exitMenuItem);
 
         this.editMenu = new JMenu(Resources.getString("menu.Edit"));

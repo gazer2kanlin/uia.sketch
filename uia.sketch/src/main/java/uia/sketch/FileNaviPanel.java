@@ -148,9 +148,6 @@ public class FileNaviPanel extends JPanel {
         if (this.photoModel.size() > 0) {
             this.fileList.setSelectedValue(this.photoModel.firstElement(), true);
         }
-        else {
-
-        }
     }
 
     void changeName() {
