@@ -3,7 +3,10 @@ language: java
 
 sudo: false
 
-jdk:
+script:
+  - mvn cobertura:cobertura -f ./uia.sketch/pom.xml
+
+  jdk:
   - oraclejdk8
   
 branches:
