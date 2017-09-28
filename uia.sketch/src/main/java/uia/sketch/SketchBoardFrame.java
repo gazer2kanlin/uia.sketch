@@ -87,15 +87,18 @@ public class SketchBoardFrame extends JFrame {
             }
 
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            String fontName = "Monospace";
+            int fontSize = 12;
             if (Resources.LOCALE != Locale.TAIWAN && Resources.LOCALE != Locale.TRADITIONAL_CHINESE) {
-                FontUIResource f = new FontUIResource(new Font("Tahoma", Font.PLAIN, 11));
-                Enumeration<Object> keys = UIManager.getDefaults().keys();
-                while (keys.hasMoreElements()) {
-                    Object key = keys.nextElement();
-                    Object value = UIManager.get(key);
-                    if (value instanceof FontUIResource) {
-                        UIManager.put(key, f);
-                    }
+                fontName = "Tahoma";
+            }
+            FontUIResource f = new FontUIResource(new Font(fontName, Font.PLAIN, fontSize));
+            Enumeration<Object> keys = UIManager.getDefaults().keys();
+            while (keys.hasMoreElements()) {
+                Object key = keys.nextElement();
+                Object value = UIManager.get(key);
+                if (value instanceof FontUIResource) {
+                    UIManager.put(key, f);
                 }
             }
         }
@@ -196,33 +199,18 @@ public class SketchBoardFrame extends JFrame {
         this.fileMenu.add(this.openMenuItem);
 
         this.saveMenuItem = new JMenuItem(Resources.getString("menu.Save"));
-        this.saveMenuItem.addActionListener(evt -> this.filePanel.saveSketchBook(this.lastFile));
+        this.saveMenuItem.addActionListener(evt -> {
+            if (this.lastFile == null) {
+                saveAs();
+            }
+            else {
+                this.filePanel.saveSketchBook(this.lastFile);
+            }
+        });
         this.fileMenu.add(this.saveMenuItem);
 
         this.saveAsMenuItem = new JMenuItem(Resources.getString("menu.SaveAs"));
-        this.saveAsMenuItem.addActionListener(evt -> {
-            JFileChooser fc = new JFileChooser();
-            fc.setCurrentDirectory(this.lastFile);
-            fc.setFileFilter(new FileFilter() {
-
-                @Override
-                public boolean accept(File f) {
-                    return f.isDirectory() || f.getAbsolutePath().toLowerCase().endsWith(".xml");
-                }
-
-                @Override
-                public String getDescription() {
-                    return "Sketch book (*.xml)";
-                }
-
-            });
-            int returnVal = fc.showSaveDialog(SketchBoardFrame.this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                this.lastFile = fc.getSelectedFile();
-                this.filePanel.saveSketchBook(this.lastFile);
-            }
-
-        });
+        this.saveAsMenuItem.addActionListener(evt -> saveAs());
         this.fileMenu.add(this.saveAsMenuItem);
         this.fileMenu.addSeparator();
 
@@ -279,6 +267,29 @@ public class SketchBoardFrame extends JFrame {
 
     public FileNaviPanel getFileNaviPanel() {
         return this.filePanel;
+    }
+
+    private void saveAs() {
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(this.lastFile);
+        fc.setFileFilter(new FileFilter() {
+
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getAbsolutePath().toLowerCase().endsWith(".xml");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Sketch book (*.xml)";
+            }
+
+        });
+        int returnVal = fc.showSaveDialog(SketchBoardFrame.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            this.lastFile = fc.getSelectedFile();
+            this.filePanel.saveSketchBook(this.lastFile);
+        }
     }
 
     private void windowLoaded() {
