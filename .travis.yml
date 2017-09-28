@@ -6,9 +6,5 @@ sudo: false
 script:
   - mvn cobertura:cobertura -f ./uia.sketch/pom.xml
 
-  jdk:
+jdk:
   - oraclejdk8
-  
-branches:
-  only:
-  - master
