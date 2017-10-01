@@ -91,14 +91,14 @@ public class SketchBoardFrame extends JFrame {
             int fontSize = 12;
             if (Resources.LOCALE != Locale.TAIWAN && Resources.LOCALE != Locale.TRADITIONAL_CHINESE) {
                 fontName = "Tahoma";
-            }
-            FontUIResource f = new FontUIResource(new Font(fontName, Font.PLAIN, fontSize));
-            Enumeration<Object> keys = UIManager.getDefaults().keys();
-            while (keys.hasMoreElements()) {
-                Object key = keys.nextElement();
-                Object value = UIManager.get(key);
-                if (value instanceof FontUIResource) {
-                    UIManager.put(key, f);
+                FontUIResource f = new FontUIResource(new Font(fontName, Font.PLAIN, fontSize));
+                Enumeration<Object> keys = UIManager.getDefaults().keys();
+                while (keys.hasMoreElements()) {
+                    Object key = keys.nextElement();
+                    Object value = UIManager.get(key);
+                    if (value instanceof FontUIResource) {
+                        UIManager.put(key, f);
+                    }
                 }
             }
         }

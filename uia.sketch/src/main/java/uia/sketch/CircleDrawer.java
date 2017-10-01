@@ -1,11 +1,11 @@
 package uia.sketch;
 
 import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.geom.Ellipse2D;
 
 /**
  * Grid drawer.
@@ -13,7 +13,7 @@ import java.awt.RenderingHints;
  * @author Kyle K. Lin
  *
  */
-public class GridDrawer implements LayerDrawer {
+public class CircleDrawer implements LayerDrawer {
 
     private PhotoPanel panel;
 
@@ -23,15 +23,15 @@ public class GridDrawer implements LayerDrawer {
 
     private Point offset;
 
-    private int degree;
-
     private boolean enabled;
+
+    private int degree;
 
     /**
      * Constructor.
      */
-    public GridDrawer() {
-        this(40, Color.gray, 0, true);
+    public CircleDrawer() {
+        this(100, Color.gray, true);
     }
 
     /**
@@ -41,43 +41,18 @@ public class GridDrawer implements LayerDrawer {
      * @param degree Degree.
      * @param enabled Enabled or not.
      */
-    public GridDrawer(int width, Color lineColor, int degree, boolean enabled) {
+    public CircleDrawer(int width, Color lineColor, boolean enabled) {
         this.width = width;
         this.lineColor = lineColor;
-        this.offset = new Point(0, 0);
-        this.degree = degree;
+        this.offset = new Point(180, 180);
         this.enabled = enabled;
     }
 
     public void reset() {
-        this.width = 40;
+        this.width = 100;
         this.lineColor = Color.gray;
         this.offset = new Point(0, 0);
-        this.degree = 0;
         this.enabled = true;
-    }
-
-    /**
-     * Get the degree.
-     * @return Degree.
-     */
-    @Override
-    public int getDegree() {
-        return this.degree;
-    }
-
-    /**
-     * Set the degree between -45 and 45.
-     * @param degree
-     */
-    @Override
-    public void setDegree(int degree) {
-        int temp = degree % 45;
-        if (temp == this.degree) {
-            return;
-        }
-        this.degree = temp;
-        repaint();
     }
 
     /**
@@ -96,6 +71,17 @@ public class GridDrawer implements LayerDrawer {
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        repaint();
+    }
+
+    @Override
+    public int getDegree() {
+        return this.degree;
+    }
+
+    @Override
+    public void setDegree(int degree) {
+        this.degree = degree;
         repaint();
     }
 
@@ -193,62 +179,32 @@ public class GridDrawer implements LayerDrawer {
             return;
         }
 
+        Ellipse2D.Double circle = new Ellipse2D.Double();
+        circle.width = this.width * 2;
+        circle.height = this.width * 2;
+        circle.x = this.offset.getX() - this.width;
+        circle.y = this.offset.getY() - this.width;
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Point offset = this.offset;
-        g2d.translate(offset.x, offset.y);
+        g2d.setColor(this.lineColor);
+        g2d.draw(circle);
+        g2d.setColor(new Color(255, 255, 255, 100));
+        g2d.fill(circle);
+        g2d.setColor(this.lineColor);
 
-        int left = -offset.x - this.panel.getWidth();
-        int top = -offset.y - this.panel.getHeight();
-        int right = left + 3 * this.panel.getWidth();
-        int bottom = top + 3 * this.panel.getHeight();
-
-        int x0 = (int) Math.ceil((double) left / this.width) * this.width;
-        int y0 = (int) Math.ceil((double) top / this.width) * this.width;
-
-        double r = Math.toRadians(this.degree);
-        g2d.rotate(r);
-
-        g.setColor(this.lineColor);
-        while (x0 < right) {
-            g.drawLine(x0, top, x0, bottom);
-            x0 += this.width;
-        }
-
-        while (y0 < bottom) {
-            g.drawLine(left, y0, right, y0);
-            y0 += this.width;
-        }
-
-        // g.fillRect(-2, -2, 5, 5);
-        int hw = this.width / 2;
-        Color contrastColor = contrastColor(this.lineColor);
-        g2d.setPaint(new GradientPaint(-hw, 0, this.lineColor, 0, 0, contrastColor));
-        g.drawLine(-this.width, 0, 0, 0);
-        g2d.setPaint(new GradientPaint(0, 0, contrastColor, hw, 0, this.lineColor));
-        g.drawLine(0, 0, this.width, 0);
-        g2d.setPaint(new GradientPaint(0, -hw, this.lineColor, 0, 0, contrastColor));
-        g.drawLine(0, -this.width, 0, 0);
-        g2d.setPaint(new GradientPaint(0, 0, contrastColor, 0, hw, this.lineColor));
-        g.drawLine(0, 0, 0, this.width);
-
-        //g.setColor(contrastColor(this.lineColor));
-        //g.drawLine(-5, 0, 5, 0);
-        //g.drawLine(0, -5, 0, 5);
-
+        g2d.translate(this.offset.x, this.offset.y);
+        g2d.rotate(Math.toRadians(this.degree));
+        g2d.drawLine(0, -this.width - 10, 0, this.width + 10);
+        g2d.drawLine(-this.width - 10, 0, this.width + 10, 0);
         g2d.rotate(Math.toRadians(-this.degree));
-        g2d.translate(-offset.x, -offset.y);
+        g2d.translate(-this.offset.x, -this.offset.y);
     }
 
     private void repaint() {
         if (this.panel != null) {
             this.panel.repaint();
         }
-    }
-
-    private static Color contrastColor(Color color) {
-        double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
-        return y >= 128 ? Color.black : Color.white;
     }
 }

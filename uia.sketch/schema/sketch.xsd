@@ -41,6 +41,7 @@
     </complexType>
     <complexType name="GridType">
         <sequence>
+            <element name="name" type="string"></element>
             <element name="offset" type="string" default="0,0"></element>
             <element name="width" type="int" default="40"></element>
             <element name="degree" type="int"></element>

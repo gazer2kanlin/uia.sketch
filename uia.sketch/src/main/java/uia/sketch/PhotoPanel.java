@@ -31,7 +31,7 @@ public class PhotoPanel extends JPanel {
      *
      */
     public enum DragTargetType {
-        PHOTO, GRID1, GRID2
+        PHOTO, GRID1, GRID2, CIRCLE
     }
 
     private static final long serialVersionUID = -8559394957522314281L;
@@ -48,7 +48,9 @@ public class PhotoPanel extends JPanel {
 
     private final GridDrawer secondGridDrawer;
 
-    private GridDrawer selectedGridDrawer;
+    private final CircleDrawer circleDrawer;
+
+    private LayerDrawer selectedGridDrawer;
 
     private DragTargetType dragTarget;
 
@@ -72,8 +74,13 @@ public class PhotoPanel extends JPanel {
 
         this.firstGridDrawer = new GridDrawer();
         this.firstGridDrawer.setPhotoPanel(this);
+
         this.secondGridDrawer = new GridDrawer(100, new Color(200, 200, 200), 0, false);
         this.secondGridDrawer.setPhotoPanel(this);
+
+        this.circleDrawer = new CircleDrawer(100, new Color(180, 180, 180), false);
+        this.circleDrawer.setPhotoPanel(this);
+
         this.selectedGridDrawer = this.firstGridDrawer;
 
         GridMotionListener listener = new GridMotionListener();
@@ -186,7 +193,9 @@ public class PhotoPanel extends JPanel {
             return;
         }
         this.offset = offset;
-        this.pf.config.setOffset(SketchBookTypeHelper.toPointString(this.offset));
+        if (this.pf != null && this.pf.config != null) {
+            this.pf.config.setOffset(SketchBookTypeHelper.toPointString(this.offset));
+        }
         repaint();
     }
 
@@ -250,6 +259,19 @@ public class PhotoPanel extends JPanel {
         this.dragTarget = dragMode;
     }
 
+    public LayerDrawer getLayerDrawer(int index) {
+        if (index == 0) {
+            return this.firstGridDrawer;
+        }
+        if (index == 1) {
+            return this.secondGridDrawer;
+        }
+        if (index == 2) {
+            return this.circleDrawer;
+        }
+        return null;
+    }
+
     /**
      * Get first grid drawer.
      * @return Grid drawer.
@@ -270,7 +292,15 @@ public class PhotoPanel extends JPanel {
      * Get selected grid drawer.
      * @return Grid drawer.
      */
-    public GridDrawer getSelectedGridDrawer() {
+    public CircleDrawer getCircleDrawer() {
+        return this.circleDrawer;
+    }
+
+    /**
+     * Get selected grid drawer.
+     * @return Grid drawer.
+     */
+    public LayerDrawer getSelectedGridDrawer() {
         return this.selectedGridDrawer;
     }
 
@@ -288,12 +318,20 @@ public class PhotoPanel extends JPanel {
         this.selectedGridDrawer = this.secondGridDrawer;
     }
 
+    /**
+     * Set second grid drawer to be selected.
+     */
+    public void selectCircleDrawer() {
+        this.selectedGridDrawer = this.circleDrawer;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(this.backgroundImage, this.offset.x, this.offset.y, this);
         this.secondGridDrawer.paint(g);
         this.firstGridDrawer.paint(g);
+        this.circleDrawer.paint(g);
     }
 
     /**

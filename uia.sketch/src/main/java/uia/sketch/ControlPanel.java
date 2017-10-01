@@ -2,6 +2,7 @@ package uia.sketch;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -53,6 +54,8 @@ public class ControlPanel extends JPanel {
 
     private JRadioButton dragPhotoButton;
 
+    private JRadioButton dragCircleButton;
+
     private JRadioButton dragGrid1Button;
 
     private JRadioButton dragGrid2Button;
@@ -60,6 +63,8 @@ public class ControlPanel extends JPanel {
     private JToggleButton visible1Button;
 
     private JToggleButton visible2Button;
+
+    private JToggleButton visible3Button;
 
     private boolean allowApply;
 
@@ -85,14 +90,14 @@ public class ControlPanel extends JPanel {
                 this.mainFrame.getPhotoPanel().loadImage(this.lastFile);
                 this.mainFrame.getStatusPanel().setFileName(this.lastFile.getAbsolutePath());
                 this.phZoomSlider.setValue(10);
-        
+
                 this.pf.config.setName(this.lastFile.getName());
                 this.pf.config.setPath(this.lastFile.getAbsolutePath());
                 this.pf.config.setZoom(1.0);
                 this.pf.config.setViewWidth(this.mainFrame.getPhotoPanel().getViewWidth());
                 this.pf.config.setViewHeight(this.mainFrame.getPhotoPanel().getViewHeight());
             }
-        
+
         });
         add(this.phFileButton);
         */
@@ -162,7 +167,7 @@ public class ControlPanel extends JPanel {
         this.gridWidthSlider.setSnapToTicks(true);
         this.gridWidthSlider.setPaintLabels(true);
         this.gridWidthSlider.setMinimum(20);
-        this.gridWidthSlider.setMaximum(320);
+        this.gridWidthSlider.setMaximum(420);
         this.gridWidthSlider.setBounds(10, 227, 200, 23);
         this.gridWidthSlider.addChangeListener(evt -> {
             this.mainFrame.getPhotoPanel().getSelectedGridDrawer().setWidth(this.gridWidthSlider.getValue());
@@ -228,29 +233,37 @@ public class ControlPanel extends JPanel {
         // Drag
         JLabel dragModeLabel = new JLabel(Resources.getString("drag.Name"));
         dragModeLabel.setIcon(Resources.getImageIcon("drag.png"));
-        dragModeLabel.setBounds(10, 87, 90, 15);
+        dragModeLabel.setBounds(10, 82, 90, 15);
         add(dragModeLabel);
 
         this.dragPhotoButton = new JRadioButton(Resources.getString("drag.Photo"));
         this.dragPhotoButton.setSelected(true);
         this.dragPhotoButton.setEnabled(false);
-        this.dragPhotoButton.setBounds(10, 108, 90, 23);
+        this.dragPhotoButton.setBounds(10, 103, 90, 23);
         this.dragPhotoButton.addActionListener(evt -> dragModeChanged());
         add(this.dragPhotoButton);
 
+        this.dragCircleButton = new JRadioButton(Resources.getString("drag.Circle"));
+        this.dragCircleButton.setEnabled(false);
+        this.dragCircleButton.setBounds(10, 153, 90, 23);
+        this.dragCircleButton.addActionListener(evt -> dragModeChanged());
+        add(this.dragCircleButton);
+
         this.dragGrid1Button = new JRadioButton(Resources.getString("drag.Grid1"));
-        this.dragGrid1Button.setBounds(10, 133, 90, 23);
+        this.dragGrid1Button.setEnabled(false);
+        this.dragGrid1Button.setBounds(10, 128, 90, 23);
         this.dragGrid1Button.addActionListener(evt -> dragModeChanged());
         add(this.dragGrid1Button);
 
         this.dragGrid2Button = new JRadioButton(Resources.getString("drag.Grid2"));
         this.dragGrid2Button.setEnabled(false);
-        this.dragGrid2Button.setBounds(114, 133, 90, 23);
+        this.dragGrid2Button.setBounds(114, 128, 90, 23);
         this.dragGrid2Button.addActionListener(evt -> dragModeChanged());
         add(this.dragGrid2Button);
 
         ButtonGroup bg = new ButtonGroup();
         bg.add(this.dragPhotoButton);
+        bg.add(this.dragCircleButton);
         bg.add(this.dragGrid1Button);
         bg.add(this.dragGrid2Button);
 
@@ -261,7 +274,6 @@ public class ControlPanel extends JPanel {
         add(visibleLabel);
 
         this.visible1Button = new JToggleButton(Resources.getString("grid.First"));
-        this.visible1Button.setSelected(true);
         this.visible1Button.setIcon(Resources.getImageIcon("p1.png"));
         this.visible1Button.setBounds(10, 413, 96, 23);
         this.visible1Button.addActionListener(evt -> {
@@ -278,6 +290,15 @@ public class ControlPanel extends JPanel {
             apply();
         });
         add(this.visible2Button);
+
+        this.visible3Button = new JToggleButton(Resources.getString("grid.Circle"));
+        this.visible3Button.setIcon(Resources.getImageIcon("p3.png"));
+        this.visible3Button.setBounds(10, 444, 96, 23);
+        this.visible3Button.addActionListener(evt -> {
+            this.mainFrame.getPhotoPanel().getCircleDrawer().setEnabled(this.visible3Button.isSelected());
+            apply();
+        });
+        add(this.visible3Button);
 
         setEnabled(false);
     }
@@ -307,6 +328,7 @@ public class ControlPanel extends JPanel {
         this.phZoomButton.setEnabled(enabled);
 
         this.dragPhotoButton.setEnabled(enabled);
+        this.dragCircleButton.setEnabled(enabled);
         this.dragGrid1Button.setEnabled(enabled);
         this.dragGrid2Button.setEnabled(enabled);
 
@@ -321,6 +343,7 @@ public class ControlPanel extends JPanel {
 
         this.visible1Button.setEnabled(enabled);
         this.visible2Button.setEnabled(enabled);
+        this.visible3Button.setEnabled(enabled);
 
         this.allowApply = true;
 
@@ -332,6 +355,7 @@ public class ControlPanel extends JPanel {
         this.dragPhotoButton.setSelected(true);
         this.visible1Button.setSelected(true);
         this.visible2Button.setSelected(false);
+        this.visible3Button.setSelected(false);
         this.phZoomSlider.setValue(10);
         this.gridDegreeSlider.setValue(0);
 
@@ -363,15 +387,21 @@ public class ControlPanel extends JPanel {
         this.mainFrame.getPhotoPanel().loadImage(pf);
         this.phZoomSlider.setValue((int) (10 * photo.getZoom()));
 
-        GridType g1 = photo.getGrids().getGrid().get(0);
-        GridDrawer gd1 = this.mainFrame.getPhotoPanel().getFirstGridDrawer();
-        applyTo(gd1, g1);
-        this.visible1Button.setSelected(g1.isEnabled());
-
-        GridType g2 = photo.getGrids().getGrid().get(1);
-        GridDrawer gd2 = this.mainFrame.getPhotoPanel().getSecondGridDrawer();
-        applyTo(gd2, g2);
-        this.visible2Button.setSelected(g2.isEnabled());
+        List<GridType> gts = photo.getGrids().getGrid();
+        JToggleButton[] visibleButtons = new JToggleButton[] {
+                this.visible1Button,
+                this.visible2Button,
+                this.visible3Button
+        };
+        //TODO:
+        this.mainFrame.getPhotoPanel().getCircleDrawer().setEnabled(false);
+        this.visible3Button.setSelected(false);
+        for (int i = 0; i < gts.size(); i++) {
+            LayerDrawer drawer = this.mainFrame.getPhotoPanel().getLayerDrawer(i);
+            GridType gt = photo.getGrids().getGrid().get(i);
+            applyTo(drawer, gt);
+            visibleButtons[i].setSelected(drawer.isEnabled());
+        }
 
         if ("GRID1".equalsIgnoreCase(photo.getDragTarget())) {
             this.dragGrid1Button.setSelected(true);
@@ -382,6 +412,11 @@ public class ControlPanel extends JPanel {
             this.dragGrid2Button.setSelected(true);
             this.mainFrame.getPhotoPanel().setDragMode(DragTargetType.GRID2);
             this.mainFrame.getPhotoPanel().selectSecondGridDrawer();
+        }
+        else if ("CIRCLE".equalsIgnoreCase(photo.getDragTarget())) {
+            this.dragCircleButton.setSelected(true);
+            this.mainFrame.getPhotoPanel().setDragMode(DragTargetType.CIRCLE);
+            this.mainFrame.getPhotoPanel().selectCircleDrawer();
         }
         else {
             this.dragPhotoButton.setSelected(true);
@@ -398,7 +433,7 @@ public class ControlPanel extends JPanel {
 
     }
 
-    private void applyFrom(GridDrawer drawer) {
+    private void applyFrom(LayerDrawer drawer) {
         this.gridWidthSlider.setValue(drawer.getWidth());
         this.gridDegreeSlider.setValue(drawer.getDegree());
         this.colorButton.setBackground(drawer.getLineColor());
@@ -419,34 +454,36 @@ public class ControlPanel extends JPanel {
             else if (this.dragGrid2Button.isSelected()) {
                 this.pf.config.setDragTarget("GRID2");
             }
+            else if (this.dragCircleButton.isSelected()) {
+                this.pf.config.setDragTarget("CIRCLE");
+            }
             else {
                 this.pf.config.setDragTarget("PHOTO");
             }
 
-            GridType g1 = this.pf.config.getGrids().getGrid().get(0);
-            GridDrawer drawer1 = this.mainFrame.getPhotoPanel().getFirstGridDrawer();
-            applyTo(g1, drawer1);
-
-            GridType g2 = this.pf.config.getGrids().getGrid().get(1);
-            GridDrawer drawer2 = this.mainFrame.getPhotoPanel().getSecondGridDrawer();
-            applyTo(g2, drawer2);
+            List<GridType> gts = this.pf.config.getGrids().getGrid();
+            for (int i = 0; i < gts.size(); i++) {
+                GridType gt = gts.get(i);
+                LayerDrawer drawer = this.mainFrame.getPhotoPanel().getLayerDrawer(i);
+                applyTo(gt, drawer);
+            }
         }
     }
 
-    private void applyTo(GridDrawer drawer, GridType grid) {
-        drawer.setDegree(grid.getDegree());
-        drawer.setEnabled(grid.isEnabled());
-        drawer.setWidth(grid.getWidth());
-        drawer.setOffset(SketchBookTypeHelper.toPoint(grid.getOffset()));
-        drawer.setLineColor(SketchBookTypeHelper.toColor(grid.getLineColor()));
+    private void applyTo(LayerDrawer target, GridType source) {
+        target.setDegree(source.getDegree());
+        target.setEnabled(source.isEnabled());
+        target.setWidth(source.getWidth());
+        target.setOffset(SketchBookTypeHelper.toPoint(source.getOffset()));
+        target.setLineColor(SketchBookTypeHelper.toColor(source.getLineColor()));
     }
 
-    private void applyTo(GridType grid, GridDrawer drawer) {
-        grid.setDegree(drawer.getDegree());
-        grid.setWidth(drawer.getWidth());
-        grid.setLineColor(SketchBookTypeHelper.toColorString(drawer.getLineColor()));
-        grid.setOffset(SketchBookTypeHelper.toPointString(drawer.getOffset()));
-        grid.setEnabled(drawer.isEnabled());
+    private void applyTo(GridType target, LayerDrawer source) {
+        target.setDegree(source.getDegree());
+        target.setWidth(source.getWidth());
+        target.setLineColor(SketchBookTypeHelper.toColorString(source.getLineColor()));
+        target.setOffset(SketchBookTypeHelper.toPointString(source.getOffset()));
+        target.setEnabled(source.isEnabled());
     }
 
     private void dragModeChanged() {
@@ -464,6 +501,13 @@ public class ControlPanel extends JPanel {
             this.mainFrame.getPhotoPanel().getSecondGridDrawer().setEnabled(true);
             this.visible2Button.setSelected(true);
             applyFrom(this.mainFrame.getPhotoPanel().getSecondGridDrawer());
+        }
+        else if (this.dragCircleButton.isSelected()) {
+            this.mainFrame.getPhotoPanel().setDragMode(DragTargetType.CIRCLE);
+            this.mainFrame.getPhotoPanel().selectCircleDrawer();
+            this.mainFrame.getPhotoPanel().getCircleDrawer().setEnabled(true);
+            this.visible3Button.setSelected(true);
+            applyFrom(this.mainFrame.getPhotoPanel().getCircleDrawer());
         }
         else {
             this.mainFrame.getPhotoPanel().setDragMode(DragTargetType.PHOTO);
