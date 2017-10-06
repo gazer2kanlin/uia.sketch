@@ -76,7 +76,7 @@ public class ControlPanel extends JPanel {
      */
     public ControlPanel() {
         setLayout(null);
-        setPreferredSize(new Dimension(222, 565));
+        setPreferredSize(new Dimension(222, 603));
 
         // Zoom
         JLabel phZoomLabel = new JLabel(Resources.getString("photo.Zoom"));
@@ -111,13 +111,13 @@ public class ControlPanel extends JPanel {
         // Grid> Width
         JLabel gridWidthLabel = new JLabel(Resources.getString("grid.Width"));
         gridWidthLabel.setIcon(Resources.getImageIcon("grid.png"));
-        gridWidthLabel.setBounds(10, 202, 90, 15);
+        gridWidthLabel.setBounds(10, 245, 90, 15);
         add(gridWidthLabel);
 
         this.gridWidthUpButton = new JButton("");
         this.gridWidthUpButton.setIcon(Resources.getImageIcon("zoom_p.png"));
         this.gridWidthUpButton.setToolTipText("Zoom in");
-        this.gridWidthUpButton.setBounds(176, 202, 16, 16);
+        this.gridWidthUpButton.setBounds(176, 245, 16, 16);
         this.gridWidthUpButton.addActionListener(evt -> {
             int value = this.gridWidthSlider.getValue() * 2;
             this.gridWidthSlider.setValue(value);
@@ -129,7 +129,7 @@ public class ControlPanel extends JPanel {
         this.gridWidthDownButton = new JButton("");
         this.gridWidthDownButton.setIcon(Resources.getImageIcon("zoom_m.png"));
         this.gridWidthDownButton.setToolTipText("Zoom out");
-        this.gridWidthDownButton.setBounds(194, 202, 16, 16);
+        this.gridWidthDownButton.setBounds(194, 245, 16, 16);
         this.gridWidthDownButton.addActionListener(evt -> {
             int value = this.gridWidthSlider.getValue() / 2;
             this.gridWidthSlider.setValue(value);
@@ -144,7 +144,7 @@ public class ControlPanel extends JPanel {
         this.gridWidthSlider.setPaintLabels(true);
         this.gridWidthSlider.setMinimum(20);
         this.gridWidthSlider.setMaximum(420);
-        this.gridWidthSlider.setBounds(10, 227, 200, 23);
+        this.gridWidthSlider.setBounds(10, 270, 200, 23);
         this.gridWidthSlider.addChangeListener(evt -> {
             this.mainFrame.getPhotoPanel().getSelectedLayerDrawer().setWidth(this.gridWidthSlider.getValue());
             apply();
@@ -154,13 +154,13 @@ public class ControlPanel extends JPanel {
         // Grid> Degree
         JLabel gridDegreeLabel = new JLabel(Resources.getString("grid.Degree"));
         gridDegreeLabel.setIcon(Resources.getImageIcon("line_degree.png"));
-        gridDegreeLabel.setBounds(10, 260, 90, 15);
+        gridDegreeLabel.setBounds(10, 312, 90, 15);
         add(gridDegreeLabel);
 
         this.gridDegreeButton = new JButton("");
         this.gridDegreeButton.setIcon(Resources.getImageIcon("cancel.png"));
         this.gridDegreeButton.setToolTipText("Reset degree to zero.");
-        this.gridDegreeButton.setBounds(194, 260, 16, 16);
+        this.gridDegreeButton.setBounds(194, 312, 16, 16);
         this.gridDegreeButton.addActionListener(evt -> {
             this.gridDegreeSlider.setValue(0);
             this.mainFrame.getPhotoPanel().getSelectedLayerDrawer().setDegree(0);
@@ -175,7 +175,7 @@ public class ControlPanel extends JPanel {
         this.gridDegreeSlider.setValue(0);
         this.gridDegreeSlider.setMinimum(-45);
         this.gridDegreeSlider.setMaximum(45);
-        this.gridDegreeSlider.setBounds(10, 285, 200, 23);
+        this.gridDegreeSlider.setBounds(10, 337, 200, 23);
         this.gridDegreeSlider.addChangeListener(evt -> {
             this.mainFrame.getPhotoPanel().getSelectedLayerDrawer().setDegree(this.gridDegreeSlider.getValue());
             apply();
@@ -185,14 +185,14 @@ public class ControlPanel extends JPanel {
         // Grid> Line Color
         JLabel colorLabel = new JLabel(Resources.getString("grid.LineColor"));
         colorLabel.setIcon(Resources.getImageIcon("line_color.png"));
-        colorLabel.setBounds(10, 318, 128, 15);
+        colorLabel.setBounds(10, 370, 128, 15);
         add(colorLabel);
 
         this.colorButton = new JButton("");
         this.colorButton.setIcon(Resources.getImageIcon("color-picker.png"));
         this.colorButton.setToolTipText("Choose grid line color");
         this.colorButton.setOpaque(true);
-        this.colorButton.setBounds(10, 343, 23, 23);
+        this.colorButton.setBounds(10, 395, 23, 23);
         this.colorButton.addActionListener(evt -> {
             Color newColor = JColorChooser.showDialog(
                     ControlPanel.this,
@@ -227,31 +227,31 @@ public class ControlPanel extends JPanel {
         this.dragPhotoButton = new JRadioButton(Resources.getString("drag.Photo"));
         this.dragPhotoButton.setSelected(true);
         this.dragPhotoButton.setEnabled(false);
-        this.dragPhotoButton.setBounds(10, 103, 90, 23);
+        this.dragPhotoButton.setBounds(10, 103, 145, 23);
         this.dragPhotoButton.addActionListener(evt -> dragModeChanged());
         add(this.dragPhotoButton);
 
         this.drag1Button = new JRadioButton(Resources.getString("drag.Grid1"));
         this.drag1Button.setEnabled(false);
-        this.drag1Button.setBounds(10, 128, 90, 23);
+        this.drag1Button.setBounds(10, 128, 145, 23);
         this.drag1Button.addActionListener(evt -> dragModeChanged());
         add(this.drag1Button);
 
         this.drag2Button = new JRadioButton(Resources.getString("drag.Grid2"));
         this.drag2Button.setEnabled(false);
-        this.drag2Button.setBounds(114, 128, 90, 23);
+        this.drag2Button.setBounds(10, 153, 145, 23);
         this.drag2Button.addActionListener(evt -> dragModeChanged());
         add(this.drag2Button);
 
         this.drag3Button = new JRadioButton(Resources.getString("drag.Circle"));
         this.drag3Button.setEnabled(false);
-        this.drag3Button.setBounds(10, 153, 90, 23);
+        this.drag3Button.setBounds(10, 178, 145, 23);
         this.drag3Button.addActionListener(evt -> dragModeChanged());
         add(this.drag3Button);
 
         this.drag4Button = new JRadioButton(Resources.getString("drag.Triangle"));
         this.drag4Button.setEnabled(false);
-        this.drag4Button.setBounds(114, 153, 90, 23);
+        this.drag4Button.setBounds(10, 203, 145, 23);
         this.drag4Button.addActionListener(evt -> dragModeChanged());
         add(this.drag4Button);
 
@@ -265,12 +265,12 @@ public class ControlPanel extends JPanel {
         // Visible
         JLabel visibleLabel = new JLabel(Resources.getString("grid.Visible"));
         visibleLabel.setIcon(Resources.getImageIcon("visible.png"));
-        visibleLabel.setBounds(10, 388, 90, 15);
+        visibleLabel.setBounds(10, 440, 90, 15);
         add(visibleLabel);
 
         this.visible1Button = new JToggleButton(Resources.getString("grid.First"));
         this.visible1Button.setIcon(Resources.getImageIcon("p1.png"));
-        this.visible1Button.setBounds(10, 413, 96, 23);
+        this.visible1Button.setBounds(10, 465, 96, 25);
         this.visible1Button.addActionListener(evt -> {
             this.mainFrame.getPhotoPanel().getLayerDrawer("GRID1").setEnabled(this.visible1Button.isSelected());
             apply();
@@ -279,7 +279,7 @@ public class ControlPanel extends JPanel {
 
         this.visible2Button = new JToggleButton(Resources.getString("grid.Second"));
         this.visible2Button.setIcon(Resources.getImageIcon("p2.png"));
-        this.visible2Button.setBounds(114, 413, 96, 23);
+        this.visible2Button.setBounds(114, 465, 96, 25);
         this.visible2Button.addActionListener(evt -> {
             this.mainFrame.getPhotoPanel().getLayerDrawer("GRID2").setEnabled(this.visible2Button.isSelected());
             apply();
@@ -288,7 +288,7 @@ public class ControlPanel extends JPanel {
 
         this.visible3Button = new JToggleButton(Resources.getString("grid.Circle"));
         this.visible3Button.setIcon(Resources.getImageIcon("p3.png"));
-        this.visible3Button.setBounds(10, 444, 96, 23);
+        this.visible3Button.setBounds(10, 495, 96, 25);
         this.visible3Button.addActionListener(evt -> {
             this.mainFrame.getPhotoPanel().getLayerDrawer("CIRCLE").setEnabled(this.visible3Button.isSelected());
             apply();
@@ -297,7 +297,7 @@ public class ControlPanel extends JPanel {
 
         this.visible4Button = new JToggleButton(Resources.getString("grid.Triangle"));
         this.visible4Button.setIcon(Resources.getImageIcon("p4.png"));
-        this.visible4Button.setBounds(114, 444, 96, 23);
+        this.visible4Button.setBounds(114, 495, 96, 25);
         this.visible4Button.addActionListener(evt -> {
             this.mainFrame.getPhotoPanel().getLayerDrawer("TRIANGLE").setEnabled(this.visible4Button.isSelected());
             apply();

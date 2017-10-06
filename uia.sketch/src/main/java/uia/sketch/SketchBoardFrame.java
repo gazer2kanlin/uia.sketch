@@ -115,9 +115,9 @@ public class SketchBoardFrame extends JFrame {
      */
     public SketchBoardFrame() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(Resources.getImageURL("sketch.png")));
-        setSize(980, 600);
+        setSize(980, 650);
         setLocation(100, 100);
-        setMinimumSize(new Dimension(980, 600));
+        setMinimumSize(new Dimension(980, 650));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle(Resources.TITLE + " - " + Resources.getString("text.NoName"));
         addWindowListener(new WindowAdapter() {
