@@ -1,46 +1,48 @@
-# 構圖網格
+# Grids for Sketch Composition
 
-[English](readme_en.md)
+[Chinese](readme.md)
 
 [![Build Status](https://travis-ci.org/gazer2kanlin/uia.sketch4j.svg?branch=master)](https://travis-ci.org/gazer2kanlin/uia.sketch4j)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/21668a9285304eb9b4ceaa829ddd2cd9)](https://www.codacy.com/app/gazer2kanlin/uia-sketch4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gazer2kanlin/uia.sketch&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/github/license/gazer2kanlin/uia.message4j.svg)](LICENSE)
 
-此工具可幫助業餘繪圖愛好者(例如我自己)，利用虛擬格線的套疊，增加構圖時的準確性。
+This tool helps amateur painters (for example, myself) to increase the accuracy of composition by overlapping virtual grid lines on a picture.
 
-目前有的格線：
+Style of grid lines
 
-* 正方形
-* 圓形
-* 正三角形
+* Grid
 
-## 功能
+* Circle
 
-* 多重套疊
+* Triangle
 
-* 可自定義格線顏色
+## Features
 
-* 可調整格線間距與角度
+* Overlap
 
-* 可利用鍵盤調整格線間距與角度
+* Customize line color
 
-* 可利用鍵盤調整照片大小
+* Customize width and degree
 
-## 截圖
+* Use keyboard to change width and degree.
 
-### 雙正方形
+* Use keyboard to change size of picture
+
+## Screenshots
+
+### Double Grids
 ![Sample1](sample1.png)
 
-### 雙正方形
+### Double Grids
 ![Sample2](sample2.png)
 
-### 圓形 & 正方形
+### Circle & Grid
 ![Sample3](sample3.png)
 
-### 正三角形
+### Triangle
 ![Sample4](sample4.png)
 
-## 版權和許可證
+## Copyright and License
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
