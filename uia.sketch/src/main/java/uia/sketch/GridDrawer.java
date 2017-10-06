@@ -7,6 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 
+import uia.sketch.model.SketchBookTypeHelper;
+import uia.sketch.model.xml.LayerType;
+
 /**
  * Grid drawer.
  *
@@ -14,6 +17,10 @@ import java.awt.RenderingHints;
  *
  */
 public class GridDrawer implements LayerDrawer {
+
+    private String layerName;
+
+    private LayerType layerType;
 
     private PhotoPanel panel;
 
@@ -49,12 +56,34 @@ public class GridDrawer implements LayerDrawer {
         this.enabled = enabled;
     }
 
+    @Override
     public void reset() {
         this.width = 40;
         this.lineColor = Color.gray;
         this.offset = new Point(0, 0);
         this.degree = 0;
         this.enabled = true;
+    }
+
+    @Override
+    public void apply(LayerType layerType) {
+        this.layerType = layerType;
+        setLayerName(layerType.getName());
+        setDegree(layerType.getDegree());
+        setEnabled(layerType.isEnabled());
+        setWidth(layerType.getWidth());
+        setOffset(SketchBookTypeHelper.toPoint(layerType.getOffset()));
+        setLineColor(SketchBookTypeHelper.toColor(layerType.getLineColor()));
+    }
+
+    @Override
+    public String getLayerName() {
+        return this.layerName;
+    }
+
+    @Override
+    public void setLayerName(String layerName) {
+        this.layerName = layerName;
     }
 
     /**
@@ -118,6 +147,7 @@ public class GridDrawer implements LayerDrawer {
             return;
         }
         this.offset = offset;
+        this.layerType.setOffset(SketchBookTypeHelper.toPointString(offset));
         repaint();
     }
 
@@ -210,14 +240,14 @@ public class GridDrawer implements LayerDrawer {
         double r = Math.toRadians(this.degree);
         g2d.rotate(r);
 
-        g.setColor(this.lineColor);
+        g2d.setColor(this.lineColor);
         while (x0 < right) {
-            g.drawLine(x0, top, x0, bottom);
+            g2d.drawLine(x0, top, x0, bottom);
             x0 += this.width;
         }
 
         while (y0 < bottom) {
-            g.drawLine(left, y0, right, y0);
+            g2d.drawLine(left, y0, right, y0);
             y0 += this.width;
         }
 
@@ -225,13 +255,13 @@ public class GridDrawer implements LayerDrawer {
         int hw = this.width / 2;
         Color contrastColor = contrastColor(this.lineColor);
         g2d.setPaint(new GradientPaint(-hw, 0, this.lineColor, 0, 0, contrastColor));
-        g.drawLine(-this.width, 0, 0, 0);
+        g2d.drawLine(-this.width, 0, 0, 0);
         g2d.setPaint(new GradientPaint(0, 0, contrastColor, hw, 0, this.lineColor));
-        g.drawLine(0, 0, this.width, 0);
+        g2d.drawLine(0, 0, this.width, 0);
         g2d.setPaint(new GradientPaint(0, -hw, this.lineColor, 0, 0, contrastColor));
-        g.drawLine(0, -this.width, 0, 0);
+        g2d.drawLine(0, -this.width, 0, 0);
         g2d.setPaint(new GradientPaint(0, 0, contrastColor, 0, hw, this.lineColor));
-        g.drawLine(0, 0, 0, this.width);
+        g2d.drawLine(0, 0, 0, this.width);
 
         //g.setColor(contrastColor(this.lineColor));
         //g.drawLine(-5, 0, 5, 0);

@@ -30,16 +30,16 @@
             <element name="viewHeight" type="int"></element>
             <element name="offset" type="string" default="0,0"></element>
             <element name="dragTarget" type="string" default="PHOTO"></element>
-            <element name="grids" type="uia:GridListType"></element>
+            <element name="layers" type="uia:LayerListType"></element>
         </sequence>
     </complexType>
 
-    <complexType name="GridListType">
+    <complexType name="LayerListType">
         <sequence>
-            <element name="grid" type="uia:GridType" maxOccurs="unbounded" minOccurs="1"></element>
+            <element name="layer" type="uia:LayerType" maxOccurs="unbounded" minOccurs="1"></element>
         </sequence>
     </complexType>
-    <complexType name="GridType">
+    <complexType name="LayerType">
         <sequence>
             <element name="name" type="string"></element>
             <element name="offset" type="string" default="0,0"></element>

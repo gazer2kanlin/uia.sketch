@@ -4,11 +4,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import uia.sketch.model.xml.LayerType;
+
 public interface LayerDrawer {
 
     public PhotoPanel getPhotoPanel();
 
     public void setPhotoPanel(PhotoPanel panel);
+
+    public void apply(LayerType layerType);
+
+    public String getLayerName();
+
+    public void setLayerName(String layerName);
 
     public Point getOffset();
 
@@ -31,4 +39,6 @@ public interface LayerDrawer {
     public void setEnabled(boolean enabled);
 
     public boolean isEnabled();
+
+    public void reset();
 }

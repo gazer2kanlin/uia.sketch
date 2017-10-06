@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -31,7 +32,7 @@ public class PhotoPanel extends JPanel {
      *
      */
     public enum DragTargetType {
-        PHOTO, GRID1, GRID2, CIRCLE
+        PHOTO, GRID1, GRID2, CIRCLE, TRIANGLE
     }
 
     private static final long serialVersionUID = -8559394957522314281L;
@@ -44,13 +45,9 @@ public class PhotoPanel extends JPanel {
 
     private Image backgroundImage;
 
-    private final GridDrawer firstGridDrawer;
+    private LayerDrawer selectedLayerDrawer;
 
-    private final GridDrawer secondGridDrawer;
-
-    private final CircleDrawer circleDrawer;
-
-    private LayerDrawer selectedGridDrawer;
+    private LinkedHashMap<String, LayerDrawer> layerDrawers;
 
     private DragTargetType dragTarget;
 
@@ -68,20 +65,33 @@ public class PhotoPanel extends JPanel {
      * Constructor.
      */
     public PhotoPanel() {
+        this.layerDrawers = new LinkedHashMap<String, LayerDrawer>();
+
         this.dragTarget = DragTargetType.PHOTO;
         this.offset = new Point(0, 0);
         this.zoom = 1.0d;
 
-        this.firstGridDrawer = new GridDrawer();
-        this.firstGridDrawer.setPhotoPanel(this);
+        GridDrawer grid1LayerDrawer = new GridDrawer();
+        grid1LayerDrawer.setLayerName("GRID1");
+        grid1LayerDrawer.setPhotoPanel(this);
+        this.layerDrawers.put(grid1LayerDrawer.getLayerName(), grid1LayerDrawer);
 
-        this.secondGridDrawer = new GridDrawer(100, new Color(200, 200, 200), 0, false);
-        this.secondGridDrawer.setPhotoPanel(this);
+        GridDrawer grid2LayerDrawer = new GridDrawer(100, new Color(200, 200, 200), 0, false);
+        grid2LayerDrawer.setLayerName("GRID2");
+        grid2LayerDrawer.setPhotoPanel(this);
+        this.layerDrawers.put(grid2LayerDrawer.getLayerName(), grid2LayerDrawer);
 
-        this.circleDrawer = new CircleDrawer(100, new Color(180, 180, 180), false);
-        this.circleDrawer.setPhotoPanel(this);
+        CircleDrawer circleDrawer = new CircleDrawer(100, new Color(180, 180, 180), false);
+        circleDrawer.setLayerName("CIRCLE");
+        circleDrawer.setPhotoPanel(this);
+        this.layerDrawers.put(circleDrawer.getLayerName(), circleDrawer);
 
-        this.selectedGridDrawer = this.firstGridDrawer;
+        TriangleDrawer triDrawer = new TriangleDrawer(100, new Color(180, 180, 180), 0, false);
+        triDrawer.setLayerName("TRIANGLE");
+        triDrawer.setPhotoPanel(this);
+        this.layerDrawers.put(triDrawer.getLayerName(), triDrawer);
+
+        this.selectedLayerDrawer = grid1LayerDrawer;
 
         GridMotionListener listener = new GridMotionListener();
 
@@ -106,14 +116,20 @@ public class PhotoPanel extends JPanel {
         return this.file == null ? false : loadImage(this.file);
     }
 
+    /**
+     * Reset.
+     */
     public void reset() {
         this.file = null;
         this.origImage = null;
         this.backgroundImage = null;
-        this.firstGridDrawer.reset();
-        this.firstGridDrawer.setEnabled(true);
-        this.secondGridDrawer.reset();
-        this.secondGridDrawer.setEnabled(false);
+
+        boolean enabled = true;
+        for (LayerDrawer layerDrawer : this.layerDrawers.values()) {
+            layerDrawer.reset();
+            layerDrawer.setEnabled(enabled);
+            enabled = false;
+        }
         repaint();
     }
 
@@ -135,10 +151,18 @@ public class PhotoPanel extends JPanel {
         }
     }
 
+    /**
+     * Get width of view.
+     * @return Width.
+     */
     public int getViewWidth() {
         return this.viewWidth;
     }
 
+    /**
+     * Get height of view.
+     * @return Height.
+     */
     public int getViewHeight() {
         return this.viewHeight;
     }
@@ -160,7 +184,6 @@ public class PhotoPanel extends JPanel {
             this.viewWidth = (int) (this.origImage.getWidth() * zoomFix);
             this.viewHeight = (int) (this.origImage.getHeight() * zoomFix);
             this.backgroundImage = this.origImage.getScaledInstance(this.viewWidth, this.viewHeight, Image.SCALE_SMOOTH);
-
             return true;
         }
         catch (Exception ex) {
@@ -224,10 +247,10 @@ public class PhotoPanel extends JPanel {
     }
 
     /**
-     * Set zoom.
+     * Set zoom and view.
      * @param zoom Zoom.
-     * @param viewWidth
-     * @param viewHeight
+     * @param viewWidth Width of view.
+     * @param viewHeight Height of view.
      */
     public void setZoom(double zoom, int viewWidth, int viewHeight) {
         if (this.origImage == null || this.zoom == zoom) {
@@ -245,7 +268,7 @@ public class PhotoPanel extends JPanel {
 
     /**
      * Get drag mode.
-     * @return Drag mode. GRID or PHOTO.
+     * @return Drag mode.
      */
     public DragTargetType getDragMode() {
         return this.dragTarget;
@@ -259,79 +282,32 @@ public class PhotoPanel extends JPanel {
         this.dragTarget = dragMode;
     }
 
-    public LayerDrawer getLayerDrawer(int index) {
-        if (index == 0) {
-            return this.firstGridDrawer;
-        }
-        if (index == 1) {
-            return this.secondGridDrawer;
-        }
-        if (index == 2) {
-            return this.circleDrawer;
-        }
-        return null;
-    }
-
-    /**
-     * Get first grid drawer.
-     * @return Grid drawer.
-     */
-    public GridDrawer getFirstGridDrawer() {
-        return this.firstGridDrawer;
-    }
-
-    /**
-     * Get second grid drawer.
-     * @return Grid drawer.
-     */
-    public GridDrawer getSecondGridDrawer() {
-        return this.secondGridDrawer;
+    public LayerDrawer getLayerDrawer(String layerName) {
+        return this.layerDrawers.get(layerName);
     }
 
     /**
      * Get selected grid drawer.
      * @return Grid drawer.
      */
-    public CircleDrawer getCircleDrawer() {
-        return this.circleDrawer;
+    public LayerDrawer getSelectedLayerDrawer() {
+        return this.selectedLayerDrawer;
     }
 
-    /**
-     * Get selected grid drawer.
-     * @return Grid drawer.
-     */
-    public LayerDrawer getSelectedGridDrawer() {
-        return this.selectedGridDrawer;
-    }
-
-    /**
-     * Set first grid drawer to be selected.
-     */
-    public void selectFirstGridDrawer() {
-        this.selectedGridDrawer = this.firstGridDrawer;
-    }
-
-    /**
-     * Set second grid drawer to be selected.
-     */
-    public void selectSecondGridDrawer() {
-        this.selectedGridDrawer = this.secondGridDrawer;
-    }
-
-    /**
-     * Set second grid drawer to be selected.
-     */
-    public void selectCircleDrawer() {
-        this.selectedGridDrawer = this.circleDrawer;
+    public void selectLayerDrawer(String layerName) {
+        LayerDrawer layerDrawer = this.layerDrawers.get(layerName);
+        if (layerDrawer != null) {
+            this.selectedLayerDrawer = layerDrawer;
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(this.backgroundImage, this.offset.x, this.offset.y, this);
-        this.secondGridDrawer.paint(g);
-        this.firstGridDrawer.paint(g);
-        this.circleDrawer.paint(g);
+        for (LayerDrawer layerDrawer : this.layerDrawers.values()) {
+            layerDrawer.paint(g);
+        }
     }
 
     /**
@@ -350,14 +326,14 @@ public class PhotoPanel extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent evt) {
-            if (PhotoPanel.this.selectedGridDrawer == null) {
+            if (PhotoPanel.this.selectedLayerDrawer == null) {
                 return;
             }
 
             this.pt = evt.getPoint();
             if (PhotoPanel.this.dragTarget != DragTargetType.PHOTO) {
-                this.x = PhotoPanel.this.selectedGridDrawer.getOffset().x;
-                this.y = PhotoPanel.this.selectedGridDrawer.getOffset().y;
+                this.x = PhotoPanel.this.selectedLayerDrawer.getOffset().x;
+                this.y = PhotoPanel.this.selectedLayerDrawer.getOffset().y;
             }
             else {
                 this.x = PhotoPanel.this.offset.x;
@@ -374,17 +350,19 @@ public class PhotoPanel extends JPanel {
 
         @Override
         public void mouseDragged(MouseEvent evt) {
-            if (this.pt == null || PhotoPanel.this.selectedGridDrawer == null) {
+            if (this.pt == null || PhotoPanel.this.selectedLayerDrawer == null) {
                 return;
             }
 
             int ox = (this.x + evt.getX() - this.pt.x);
             int oy = (this.y + evt.getY() - this.pt.y);
+
+            Point pt = new Point(ox, oy);
             if (PhotoPanel.this.dragTarget != DragTargetType.PHOTO) {
-                PhotoPanel.this.selectedGridDrawer.setOffset(new Point(ox, oy));
+                PhotoPanel.this.selectedLayerDrawer.setOffset(pt);
             }
             else {
-                PhotoPanel.this.setOffset(new Point(ox, oy));
+                PhotoPanel.this.setOffset(pt);
             }
         }
 

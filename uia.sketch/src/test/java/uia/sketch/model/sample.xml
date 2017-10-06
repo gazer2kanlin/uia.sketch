@@ -7,22 +7,22 @@
 			<zoom>1.0</zoom>
 			<offset>0,0</offset>
 			<selectedGrid>0</selectedGrid>
-			<grids>
-				<grid>
+			<layers>
+				<layer>
 					<offset>0,0</offset>
 					<width>40</width>
 					<degree>0</degree>
 					<lineColor>60,60,0</lineColor>
 					<enabled>true</enabled>
-				</grid>
-				<grid>
+				</layer>
+				<layer>
 					<offset>0,0</offset>
 					<width>20</width>
 					<degree>10</degree>
 					<lineColor>128,128,128</lineColor>
 					<enabled>false</enabled>
-				</grid>
-			</grids>
+				</layer>
+			</layers>
 		</photo>
 		<photo>
 			<name>sample.jpg</name>
@@ -30,22 +30,22 @@
 			<zoom>1.0</zoom>
 			<offset>0,0</offset>
 			<selectedGrid>0</selectedGrid>
-			<grids>
-				<grid>
+			<layers>
+				<layer>
 					<offset>0,0</offset>
 					<width>40</width>
 					<degree>0</degree>
 					<lineColor>60,60,0</lineColor>
 					<enabled>true</enabled>
-				</grid>
-				<grid>
+				</layer>
+				<layer>
 					<offset>0,0</offset>
 					<width>20</width>
 					<degree>10</degree>
 					<lineColor>128,128,128</lineColor>
 					<enabled>false</enabled>
-				</grid>
-			</grids>
+				</layer>
+			</layers>
 		</photo>
 	</photoList>
 </sketchBook>

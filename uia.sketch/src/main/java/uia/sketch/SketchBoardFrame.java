@@ -167,7 +167,6 @@ public class SketchBoardFrame extends JFrame {
         this.newMenuItem.addActionListener(evt -> {
             this.controlPanel.reset();
             this.photoPanel.reset();
-
             this.filePanel.newSketchBook();
         });
         this.fileMenu.add(this.newMenuItem);

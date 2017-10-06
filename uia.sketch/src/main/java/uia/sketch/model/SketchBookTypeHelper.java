@@ -20,8 +20,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
 
-import uia.sketch.model.xml.GridListType;
-import uia.sketch.model.xml.GridType;
+import uia.sketch.model.xml.LayerListType;
+import uia.sketch.model.xml.LayerType;
 import uia.sketch.model.xml.ObjectFactory;
 import uia.sketch.model.xml.PhotoListType;
 import uia.sketch.model.xml.PhotoType;
@@ -51,21 +51,24 @@ public class SketchBookTypeHelper {
         photo.setViewWidth(100);
         photo.setViewHeight(100);
         photo.setDragTarget("PHOTO");
-        photo.setGrids(new GridListType());
-        photo.getGrids().getGrid().add(createGrid(true, "60,60,60", 40));
-        photo.getGrids().getGrid().add(createGrid(false, "180,180,180", 100));
+        photo.setLayers(new LayerListType());
+        photo.getLayers().getLayer().add(createLayer("GRID1", true, "60,60,60", 40));
+        photo.getLayers().getLayer().add(createLayer("GRID2", false, "180,180,180", 100));
+        photo.getLayers().getLayer().add(createLayer("CIRCLE", false, "180,180,180", 100));
+        photo.getLayers().getLayer().add(createLayer("TRIANGLE", false, "180,180,180", 100));
         return photo;
 
     }
 
-    public static GridType createGrid(boolean enabled, String color, int width) {
-        GridType grid = new GridType();
-        grid.setDegree(0);
-        grid.setEnabled(enabled);
-        grid.setLineColor(color);
-        grid.setOffset("0,0");
-        grid.setWidth(width);
-        return grid;
+    public static LayerType createLayer(String name, boolean enabled, String color, int width) {
+        LayerType layer = new LayerType();
+        layer.setName(name);
+        layer.setDegree(0);
+        layer.setEnabled(enabled);
+        layer.setLineColor(color);
+        layer.setOffset("0,0");
+        layer.setWidth(width);
+        return layer;
     }
 
     public static void save(SketchBookType book, File file) throws Exception {
