@@ -4,7 +4,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/21668a9285304eb9b4ceaa829ddd2cd9)](https://www.codacy.com/app/gazer2kanlin/uia-sketch4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gazer2kanlin/uia.sketch&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/github/license/gazer2kanlin/uia.message4j.svg)](LICENSE)
 
-| [Home](http://gazer2kanlin.github.io/uia.sketch4j/) | [English](readme_en.md) |
+[ [Home](http://gazer2kanlin.github.io/uia.sketch4j/) ] [ [English](readme_en.md) ]
 
 此工具可幫助業餘繪圖愛好者(例如我自己)，利用虛擬格線的套疊，增加構圖時的準確性。
 
