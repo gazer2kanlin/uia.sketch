@@ -71,17 +71,13 @@ public class FileNaviPanel extends JPanel {
         this.mainFrame = mainFrame;
     }
 
-    public void refresh() {
-
-    }
-
-    void newSketchBook() {
+    public void newSketchBook() {
         this.photoModel.clear();
         this.mainFrame.setTitle(Resources.TITLE + " - " + Resources.getString("text.NoName"));
 
     }
 
-    void openSketchBook(File file) {
+    public void openSketchBook(File file) {
         try {
             this.photoModel.clear();
             this.mainFrame.setTitle(Resources.TITLE + " - " + file.getAbsolutePath());
@@ -105,7 +101,7 @@ public class FileNaviPanel extends JPanel {
         }
     }
 
-    void saveSketchBook(File file) {
+    public void saveSketchBook(File file) {
         try {
             if (!file.getName().toLowerCase().endsWith(".xml")) {
                 file = new File(file.getAbsolutePath() + ".xml");
@@ -129,7 +125,7 @@ public class FileNaviPanel extends JPanel {
         }
     }
 
-    void addPhoto() {
+    public void addPhoto() {
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(this.lastFile);
         int returnVal = fc.showOpenDialog(this);
@@ -143,14 +139,19 @@ public class FileNaviPanel extends JPanel {
         }
     }
 
-    void deletePhoto() {
+    public void deletePhoto() {
         this.photoModel.removeElement(this.fileList.getSelectedValue());
         if (this.photoModel.size() > 0) {
             this.fileList.setSelectedValue(this.photoModel.firstElement(), true);
         }
     }
 
-    void changeName() {
+    public void clearPhotos() {
+        this.photoModel.clear();
+        this.fileList.setSelectedIndex(-1);
+    }
+
+    private void changeName() {
         Object aliasName = JOptionPane.showInputDialog(
                 getMainFrame(),
                 "Name",
@@ -158,10 +159,5 @@ public class FileNaviPanel extends JPanel {
         if (aliasName != null) {
             this.selectedFile.config.setName(aliasName.toString());
         }
-    }
-
-    void clearPhotos() {
-        this.photoModel.clear();
-        this.fileList.setSelectedIndex(-1);
     }
 }

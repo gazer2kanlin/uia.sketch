@@ -11,11 +11,13 @@ import java.io.File;
 import java.util.Enumeration;
 import java.util.Locale;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.UIManager;
@@ -33,6 +35,8 @@ public class SketchBoardFrame extends JFrame {
 
     private static final long serialVersionUID = -7449421668829108966L;
 
+    private static final String VER = "0.0.1";
+
     private FileNaviPanel filePanel;
 
     private PhotoPanel photoPanel;
@@ -42,10 +46,6 @@ public class SketchBoardFrame extends JFrame {
     private StatusPanel statusPanel;
 
     private File lastFile;
-
-    private JMenuBar menuBar;
-
-    private JMenu fileMenu;
 
     private JMenuItem newMenuItem;
 
@@ -61,19 +61,9 @@ public class SketchBoardFrame extends JFrame {
 
     private JMenuItem clearMenuItem;
 
-    private JMenuItem exitMenuItem;
-
-    private JMenu editMenu;
-
     private JMenuItem undoMenuItem;
 
     private JMenuItem redoMenuItem;
-
-    private JMenu helpMenu;
-
-    private JMenuItem aboutMenuItem;
-
-    private JSplitPane splitPane;
 
     /**
      *
@@ -114,7 +104,7 @@ public class SketchBoardFrame extends JFrame {
      *
      */
     public SketchBoardFrame() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(Resources.getImageURL("sketch.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(Resources.getImageURL("sketch_96.png")));
         setSize(980, 650);
         setLocation(100, 100);
         setMinimumSize(new Dimension(980, 650));
@@ -128,13 +118,13 @@ public class SketchBoardFrame extends JFrame {
             }
         });
 
-        this.splitPane = new JSplitPane();
-        getContentPane().add(this.splitPane, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane();
+        getContentPane().add(splitPane, BorderLayout.CENTER);
 
         JPanel rightPanel = new JPanel();
         rightPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
         rightPanel.setLayout(new BorderLayout(0, 0));
-        this.splitPane.setRightComponent(rightPanel);
+        splitPane.setRightComponent(rightPanel);
 
         // Photo Panel
         this.photoPanel = new PhotoPanel();
@@ -153,15 +143,15 @@ public class SketchBoardFrame extends JFrame {
         // File Navigator Panel
         this.filePanel = new FileNaviPanel();
         this.filePanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-        this.splitPane.setLeftComponent(this.filePanel);
+        splitPane.setLeftComponent(this.filePanel);
 
         // Menu Bar
-        this.menuBar = new JMenuBar();
-        setJMenuBar(this.menuBar);
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
 
         // Menu Bar> File
-        this.fileMenu = new JMenu(Resources.getString("menu.File"));
-        this.menuBar.add(this.fileMenu);
+        JMenu fileMenu = new JMenu(Resources.getString("menu.File"));
+        menuBar.add(fileMenu);
 
         this.newMenuItem = new JMenuItem(Resources.getString("menu.New"));
         this.newMenuItem.addActionListener(evt -> {
@@ -169,7 +159,7 @@ public class SketchBoardFrame extends JFrame {
             this.photoPanel.reset();
             this.filePanel.newSketchBook();
         });
-        this.fileMenu.add(this.newMenuItem);
+        fileMenu.add(this.newMenuItem);
 
         this.openMenuItem = new JMenuItem(Resources.getString("menu.Open"));
         this.openMenuItem.addActionListener(evt -> {
@@ -195,7 +185,7 @@ public class SketchBoardFrame extends JFrame {
             }
 
         });
-        this.fileMenu.add(this.openMenuItem);
+        fileMenu.add(this.openMenuItem);
 
         this.saveMenuItem = new JMenuItem(Resources.getString("menu.Save"));
         this.saveMenuItem.addActionListener(evt -> {
@@ -206,49 +196,57 @@ public class SketchBoardFrame extends JFrame {
                 this.filePanel.saveSketchBook(this.lastFile);
             }
         });
-        this.fileMenu.add(this.saveMenuItem);
+        fileMenu.add(this.saveMenuItem);
 
         this.saveAsMenuItem = new JMenuItem(Resources.getString("menu.SaveAs"));
         this.saveAsMenuItem.addActionListener(evt -> saveAs());
-        this.fileMenu.add(this.saveAsMenuItem);
-        this.fileMenu.addSeparator();
+        fileMenu.add(this.saveAsMenuItem);
+        fileMenu.addSeparator();
 
         this.addMenuItem = new JMenuItem(Resources.getString("menu.Add"));
         this.addMenuItem.addActionListener(evt -> this.filePanel.addPhoto());
-        this.fileMenu.add(this.addMenuItem);
+        fileMenu.add(this.addMenuItem);
 
         this.deleteMenuItem = new JMenuItem(Resources.getString("menu.Delete"));
         this.deleteMenuItem.addActionListener(evt -> this.filePanel.deletePhoto());
-        this.fileMenu.add(this.deleteMenuItem);
+        fileMenu.add(this.deleteMenuItem);
 
         this.clearMenuItem = new JMenuItem(Resources.getString("menu.Clear"));
         this.clearMenuItem.addActionListener(evt -> {
             this.filePanel.clearPhotos();
         });
-        this.fileMenu.add(this.clearMenuItem);
-        this.fileMenu.addSeparator();
+        fileMenu.add(this.clearMenuItem);
+        fileMenu.addSeparator();
 
-        this.exitMenuItem = new JMenuItem(Resources.getString("menu.Exit"));
-        this.exitMenuItem.addActionListener(evt -> SketchBoardFrame.this.dispose());
-        this.fileMenu.add(this.exitMenuItem);
+        JMenuItem exitMenuItem = new JMenuItem(Resources.getString("menu.Exit"));
+        exitMenuItem.addActionListener(evt -> SketchBoardFrame.this.dispose());
+        fileMenu.add(exitMenuItem);
 
-        this.editMenu = new JMenu(Resources.getString("menu.Edit"));
-        this.menuBar.add(this.editMenu);
+        JMenu editMenu = new JMenu(Resources.getString("menu.Edit"));
+        menuBar.add(editMenu);
 
         this.undoMenuItem = new JMenuItem(Resources.getString("menu.Undo"));
         this.undoMenuItem.setEnabled(false);
-        this.editMenu.add(this.undoMenuItem);
+        editMenu.add(this.undoMenuItem);
 
         this.redoMenuItem = new JMenuItem(Resources.getString("menu.Redo"));
         this.redoMenuItem.setEnabled(false);
-        this.editMenu.add(this.redoMenuItem);
+        editMenu.add(this.redoMenuItem);
 
         // Menu Bar> Help
-        this.helpMenu = new JMenu(Resources.getString("menu.Help"));
-        this.menuBar.add(this.helpMenu);
+        JMenu helpMenu = new JMenu(Resources.getString("menu.Help"));
+        menuBar.add(helpMenu);
 
-        this.aboutMenuItem = new JMenuItem(Resources.getString("menu.About"));
-        this.helpMenu.add(this.aboutMenuItem);
+        ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Resources.getImageURL("sketch_48.png")));
+
+        JMenuItem aboutMenuItem = new JMenuItem(Resources.getString("menu.About"));
+        aboutMenuItem.addActionListener(evt -> JOptionPane.showMessageDialog(
+                SketchBoardFrame.this,
+                "Grids for Sketch Composition                                  \nVersion: " + VER + "\nAuthor: Kyle K. Lin",
+                Resources.getString("menu.About"),
+                JOptionPane.INFORMATION_MESSAGE,
+                icon));
+        helpMenu.add(aboutMenuItem);
 
     }
 

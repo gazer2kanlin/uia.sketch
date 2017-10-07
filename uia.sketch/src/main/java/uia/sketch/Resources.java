@@ -8,23 +8,22 @@ import javax.swing.ImageIcon;
 
 public final class Resources {
 
-    static Locale LOCALE = Locale.TAIWAN;
+    public static Locale LOCALE = Locale.TAIWAN;
 
-    static String TITLE = "";
+    public static String TITLE = "";
 
-    static String getString(String key) {
+    public static String getString(String key) {
         return ResourceBundle.getBundle("i18n/sketch", LOCALE).getString(key);
     }
 
-    static URL getImageURL(String pngName) {
+    public static URL getImageURL(String pngName) {
         return Resources.class.getResource("/images/" + pngName);
     }
 
-    static ImageIcon getImageIcon(String pngName) {
+    public static ImageIcon getImageIcon(String pngName) {
         return new ImageIcon(Resources.class.getResource("/images/" + pngName));
     }
 
     private Resources() {
-
     }
 }

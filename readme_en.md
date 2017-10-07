@@ -11,10 +11,12 @@ This tool helps amateur painters (for example, myself) to increase the accuracy 
 Style of grid lines
 
 * Grid
-
 * Circle
-
 * Triangle
+
+## Requirements
+
+* [Java 8 Runtime](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
 
 ## Features
 
@@ -31,16 +33,16 @@ Style of grid lines
 ## Screenshots
 
 ### Double Grids
-![Sample1](sample1.png)
+![Sample1](sample1_en.png)
 
 ### Double Grids
-![Sample2](sample2.png)
-
-### Circle & Grid
-![Sample3](sample3.png)
+![Sample2](sample2_en.png)
 
 ### Triangle
-![Sample4](sample4.png)
+![Sample3](sample3_en.png)
+
+### Circle & Grid
+![Sample4](sample4_en.png)
 
 ## Copyright and License
 

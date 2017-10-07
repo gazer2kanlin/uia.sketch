@@ -365,9 +365,5 @@ public class PhotoPanel extends JPanel {
                 PhotoPanel.this.setOffset(pt);
             }
         }
-
-        @Override
-        public void mouseMoved(MouseEvent evt) {
-        }
     }
 }

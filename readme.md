@@ -8,11 +8,15 @@
 
 此工具可幫助業餘繪圖愛好者(例如我自己)，利用虛擬格線的套疊，增加構圖時的準確性。
 
-目前有的格線：
+格線樣式：
 
 * 正方形
 * 圓形
 * 正三角形
+
+## 需求
+
+* [Java 8 Runtime](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
 
 ## 功能
 
@@ -34,10 +38,10 @@
 ### 雙正方形
 ![Sample2](sample2.png)
 
-### 圓形 & 正方形
+### 正三角形
 ![Sample3](sample3.png)
 
-### 正三角形
+### 圓形 & 正方形
 ![Sample4](sample4.png)
 
 ## 版權和許可證

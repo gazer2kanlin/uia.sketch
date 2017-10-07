@@ -1,49 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sketchBook>
+	<x>1</x>
+	<y>2</y>
+	<width>400</width>
+	<height>300</height>
 	<photoList>
 		<photo>
-			<name>sample.jpg</name>
+			<name>S1</name>
 			<path>c:\temp\sample.jpg</path>
 			<zoom>1.0</zoom>
-			<offset>0,0</offset>
-			<selectedGrid>0</selectedGrid>
+			<viewWidth>300</viewWidth>
+			<viewHeight>200</viewHeight>
+			<offset>2,3</offset>
+			<dragTarget>GRID2</dragTarget>
 			<layers>
 				<layer>
+					<name>GRID1</name>
 					<offset>0,0</offset>
-					<width>40</width>
-					<degree>0</degree>
-					<lineColor>60,60,0</lineColor>
+					<width>20</width>
+					<degree>40</degree>
+					<lineColor>160,160,10</lineColor>
 					<enabled>true</enabled>
 				</layer>
 				<layer>
-					<offset>0,0</offset>
-					<width>20</width>
-					<degree>10</degree>
-					<lineColor>128,128,128</lineColor>
+					<name>GRID2</name>
+					<offset>0,1</offset>
+					<width>21</width>
+					<degree>41</degree>
+					<lineColor>128,128,28</lineColor>
+					<enabled>false</enabled>
+				</layer>
+				<layer>
+					<name>CIRCLE</name>
+					<offset>0,2</offset>
+					<width>22</width>
+					<degree>42</degree>
+					<lineColor>128,18,128</lineColor>
+					<enabled>false</enabled>
+				</layer>
+				<layer>
+					<name>TRIANGLE</name>
+					<offset>0,3</offset>
+					<width>23</width>
+					<degree>43</degree>
+					<lineColor>12,128,128</lineColor>
 					<enabled>false</enabled>
 				</layer>
 			</layers>
 		</photo>
 		<photo>
-			<name>sample.jpg</name>
+			<name>S2</name>
 			<path>c:\temp\sample2.jpg</path>
 			<zoom>1.0</zoom>
-			<offset>0,0</offset>
-			<selectedGrid>0</selectedGrid>
+			<viewWidth>400</viewWidth>
+			<viewHeight>500</viewHeight>
+			<offset>12,13</offset>
+			<dragTarget>GRID1</dragTarget>
 			<layers>
 				<layer>
+					<name>GRID1</name>
 					<offset>0,0</offset>
 					<width>40</width>
 					<degree>0</degree>
 					<lineColor>60,60,0</lineColor>
-					<enabled>true</enabled>
+					<enabled>false</enabled>
 				</layer>
 				<layer>
+					<name>GRID2</name>
 					<offset>0,0</offset>
 					<width>20</width>
 					<degree>10</degree>
-					<lineColor>128,128,128</lineColor>
-					<enabled>false</enabled>
+					<lineColor>28,128,128</lineColor>
+					<enabled>true</enabled>
+				</layer>
+				<layer>
+					<name>CIRCLE</name>
+					<offset>0,0</offset>
+					<width>20</width>
+					<degree>10</degree>
+					<lineColor>128,28,128</lineColor>
+					<enabled>true</enabled>
+				</layer>
+				<layer>
+					<name>TRIANGLE</name>
+					<offset>0,0</offset>
+					<width>20</width>
+					<degree>10</degree>
+					<lineColor>128,128,28</lineColor>
+					<enabled>true</enabled>
 				</layer>
 			</layers>
 		</photo>
