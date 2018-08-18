@@ -1,4 +1,4 @@
-package uia.sketch;
+package uia.sketch.layer;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 
+import uia.sketch.LayerDrawer;
+import uia.sketch.PhotoPanel;
 import uia.sketch.model.SketchBookTypeHelper;
 import uia.sketch.model.xml.LayerType;
 
@@ -16,7 +18,7 @@ import uia.sketch.model.xml.LayerType;
  * @author Kyle K. Lin
  *
  */
-public class GridDrawer implements LayerDrawer {
+public class TriangleDrawer implements LayerDrawer {
 
     private String layerName;
 
@@ -37,7 +39,7 @@ public class GridDrawer implements LayerDrawer {
     /**
      * Constructor.
      */
-    public GridDrawer() {
+    public TriangleDrawer() {
         this(40, Color.gray, 0, true);
     }
 
@@ -48,7 +50,7 @@ public class GridDrawer implements LayerDrawer {
      * @param degree Degree.
      * @param enabled Enabled or not.
      */
-    public GridDrawer(int width, Color lineColor, int degree, boolean enabled) {
+    public TriangleDrawer(int width, Color lineColor, int degree, boolean enabled) {
         this.width = width;
         this.lineColor = lineColor;
         this.offset = new Point(0, 0);
@@ -86,19 +88,11 @@ public class GridDrawer implements LayerDrawer {
         this.layerName = layerName;
     }
 
-    /**
-     * Get the degree.
-     * @return Degree.
-     */
     @Override
     public int getDegree() {
         return this.degree;
     }
 
-    /**
-     * Set the degree between -45 and 45.
-     * @param degree
-     */
     @Override
     public void setDegree(int degree) {
         int temp = degree % 45;
@@ -109,38 +103,22 @@ public class GridDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get enabled or not.
-     * @return Enabled.
-     */
     @Override
     public boolean isEnabled() {
         return this.enabled;
     }
 
-    /**
-     * Set enabled or not.
-     * @param enabled
-     */
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         repaint();
     }
 
-    /**
-     * Get offset.
-     * @return Offest.
-     */
     @Override
     public Point getOffset() {
         return this.offset;
     }
 
-    /**
-     * Set offset.
-     * @param offset Offset.
-     */
     @Override
     public void setOffset(Point offset) {
         if (offset == null || this.offset.equals(offset)) {
@@ -151,19 +129,11 @@ public class GridDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get width.
-     * @return Width.
-     */
     @Override
     public int getWidth() {
         return this.width;
     }
 
-    /**
-     * Set width.
-     * @param width Width.
-     */
     @Override
     public void setWidth(int width) {
         if (this.width == width) {
@@ -173,19 +143,11 @@ public class GridDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get line color.
-     * @return Line color.
-     */
     @Override
     public Color getLineColor() {
         return this.lineColor;
     }
 
-    /**
-     * Set line color.
-     * @param lineColor Line color.
-     */
     @Override
     public void setLineColor(Color lineColor) {
         if (this.lineColor.equals(lineColor)) {
@@ -195,28 +157,34 @@ public class GridDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get photo panel.
-     * @return Photo panel.
-     */
     @Override
     public PhotoPanel getPhotoPanel() {
         return this.panel;
     }
 
-    /**
-     * Set photo panel.
-     * @param panel Photo panel.
-     */
     @Override
     public void setPhotoPanel(PhotoPanel panel) {
         this.panel = panel;
     }
 
-    /**
-     * Paint grid.
-     * @param g Graphics from photo panel.
-     */
+    @Override
+    public void setHorizontal(int horizontal) {
+    }
+
+    @Override
+    public int getHorizontal() {
+        return -1;
+    }
+
+    @Override
+    public void setVertical(int vertical) {
+    }
+
+    @Override
+    public int getVertical() {
+        return -1;
+    }
+
     @Override
     public void paint(Graphics g) {
         if (this.panel == null || !this.enabled) {
@@ -229,43 +197,53 @@ public class GridDrawer implements LayerDrawer {
         Point offset = this.offset;
         g2d.translate(offset.x, offset.y);
 
-        int left = -offset.x - this.panel.getWidth();
-        int top = -offset.y - this.panel.getHeight();
-        int right = left + 3 * this.panel.getWidth();
-        int bottom = top + 3 * this.panel.getHeight();
-
-        int x0 = (int) Math.ceil((double) left / this.width) * this.width;
-        int y0 = (int) Math.ceil((double) top / this.width) * this.width;
-
         double r = Math.toRadians(this.degree);
         g2d.rotate(r);
-
         g2d.setColor(this.lineColor);
-        while (x0 < right) {
-            g2d.drawLine(x0, top, x0, bottom);
-            x0 += this.width;
+
+        int left = -offset.x - 3 * this.panel.getWidth();
+        int top = -offset.y - 3 * this.panel.getHeight();
+        int right = left + 7 * this.panel.getWidth();
+        int bottom = top + 7 * this.panel.getHeight();
+
+        int y0 = (int) Math.ceil((double) top / this.width) * this.width;
+        int y = y0;
+        while (y < bottom) {
+            g2d.drawLine(left, y, right, y);
+            y += this.width;
         }
 
-        while (y0 < bottom) {
-            g2d.drawLine(left, y0, right, y0);
-            y0 += this.width;
+        g2d.rotate(Math.toRadians(60));
+        y = y0;
+        while (y < bottom) {
+            g2d.drawLine(left, y, right, y);
+            y += this.width;
         }
+        g2d.rotate(Math.toRadians(-120));
+        y = y0;
+        while (y < bottom) {
+            g2d.drawLine(left, y, right, y);
+            y += this.width;
+        }
+        g2d.rotate(Math.toRadians(60));
 
-        // g.fillRect(-2, -2, 5, 5);
         int hw = this.width / 2;
-        Color contrastColor = contrastColor(this.lineColor);
+        Color contrastColor = LayerDrawer.contrastColor(this.lineColor);
         g2d.setPaint(new GradientPaint(-hw, 0, this.lineColor, 0, 0, contrastColor));
         g2d.drawLine(-this.width, 0, 0, 0);
         g2d.setPaint(new GradientPaint(0, 0, contrastColor, hw, 0, this.lineColor));
         g2d.drawLine(0, 0, this.width, 0);
-        g2d.setPaint(new GradientPaint(0, -hw, this.lineColor, 0, 0, contrastColor));
-        g2d.drawLine(0, -this.width, 0, 0);
-        g2d.setPaint(new GradientPaint(0, 0, contrastColor, 0, hw, this.lineColor));
-        g2d.drawLine(0, 0, 0, this.width);
-
-        //g.setColor(contrastColor(this.lineColor));
-        //g.drawLine(-5, 0, 5, 0);
-        //g.drawLine(0, -5, 0, 5);
+        g2d.rotate(Math.toRadians(60));
+        g2d.setPaint(new GradientPaint(-hw, 0, this.lineColor, 0, 0, contrastColor));
+        g2d.drawLine(-this.width, 0, 0, 0);
+        g2d.setPaint(new GradientPaint(0, 0, contrastColor, hw, 0, this.lineColor));
+        g2d.drawLine(0, 0, this.width, 0);
+        g2d.rotate(Math.toRadians(-120));
+        g2d.setPaint(new GradientPaint(-hw, 0, this.lineColor, 0, 0, contrastColor));
+        g2d.drawLine(-this.width, 0, 0, 0);
+        g2d.setPaint(new GradientPaint(0, 0, contrastColor, hw, 0, this.lineColor));
+        g2d.drawLine(0, 0, this.width, 0);
+        g2d.rotate(Math.toRadians(60));
 
         g2d.rotate(Math.toRadians(-this.degree));
         g2d.translate(-offset.x, -offset.y);
@@ -275,10 +253,5 @@ public class GridDrawer implements LayerDrawer {
         if (this.panel != null) {
             this.panel.repaint();
         }
-    }
-
-    private static Color contrastColor(Color color) {
-        double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
-        return y >= 128 ? Color.black : Color.white;
     }
 }

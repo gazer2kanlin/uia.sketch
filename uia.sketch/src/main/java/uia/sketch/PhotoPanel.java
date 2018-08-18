@@ -15,6 +15,10 @@ import java.util.LinkedHashMap;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import uia.sketch.layer.CircleDrawer;
+import uia.sketch.layer.GridDrawer;
+import uia.sketch.layer.PerspectiveDrawer;
+import uia.sketch.layer.TriangleDrawer;
 import uia.sketch.model.SketchBookTypeHelper;
 
 /**
@@ -24,16 +28,6 @@ import uia.sketch.model.SketchBookTypeHelper;
  *
  */
 public class PhotoPanel extends JPanel {
-
-    /**
-     * Drag target.
-     *
-     * @author Kyle K. Lin
-     *
-     */
-    public enum DragTargetType {
-        PHOTO, GRID1, GRID2, CIRCLE, TRIANGLE
-    }
 
     private static final long serialVersionUID = -8559394957522314281L;
 
@@ -49,7 +43,7 @@ public class PhotoPanel extends JPanel {
 
     private LinkedHashMap<String, LayerDrawer> layerDrawers;
 
-    private DragTargetType dragTarget;
+    private String dragTarget;
 
     private Point offset;
 
@@ -61,13 +55,22 @@ public class PhotoPanel extends JPanel {
 
     private SketchBoardFrame mainFrame;
 
+    private boolean crossVisible;
+
+    private int crossX;
+
+    private int crossY;
+
     /**
      * Constructor.
      */
     public PhotoPanel() {
         this.layerDrawers = new LinkedHashMap<String, LayerDrawer>();
+        this.crossVisible = true;
+        this.crossX = -1;
+        this.crossY = -1;
 
-        this.dragTarget = DragTargetType.PHOTO;
+        this.dragTarget = "PHOTO";
         this.offset = new Point(0, 0);
         this.zoom = 1.0d;
 
@@ -90,6 +93,11 @@ public class PhotoPanel extends JPanel {
         triDrawer.setLayerName("TRIANGLE");
         triDrawer.setPhotoPanel(this);
         this.layerDrawers.put(triDrawer.getLayerName(), triDrawer);
+
+        PerspectiveDrawer persDrawer = new PerspectiveDrawer(100, new Color(180, 180, 180), false);
+        persDrawer.setLayerName("PERSPECTIVE");
+        persDrawer.setPhotoPanel(this);
+        this.layerDrawers.put(persDrawer.getLayerName(), persDrawer);
 
         this.selectedLayerDrawer = grid1LayerDrawer;
 
@@ -165,6 +173,14 @@ public class PhotoPanel extends JPanel {
      */
     public int getViewHeight() {
         return this.viewHeight;
+    }
+
+    public boolean isCrossVisible() {
+        return this.crossVisible;
+    }
+
+    public void setCrossVisible(boolean crossVisible) {
+        this.crossVisible = crossVisible;
     }
 
     /**
@@ -270,7 +286,7 @@ public class PhotoPanel extends JPanel {
      * Get drag mode.
      * @return Drag mode.
      */
-    public DragTargetType getDragMode() {
+    public String getDragMode() {
         return this.dragTarget;
     }
 
@@ -278,7 +294,7 @@ public class PhotoPanel extends JPanel {
      * Set drag mode.
      * @param dragMode Drag mode.
      */
-    public void setDragMode(DragTargetType dragMode) {
+    public void setDragMode(String dragMode) {
         this.dragTarget = dragMode;
     }
 
@@ -297,7 +313,9 @@ public class PhotoPanel extends JPanel {
     public void selectLayerDrawer(String layerName) {
         LayerDrawer layerDrawer = this.layerDrawers.get(layerName);
         if (layerDrawer != null) {
+            System.out.println(layerName);
             this.selectedLayerDrawer = layerDrawer;
+            this.selectedLayerDrawer.setEnabled(true);
         }
     }
 
@@ -307,6 +325,14 @@ public class PhotoPanel extends JPanel {
         g.drawImage(this.backgroundImage, this.offset.x, this.offset.y, this);
         for (LayerDrawer layerDrawer : this.layerDrawers.values()) {
             layerDrawer.paint(g);
+        }
+        if (this.crossVisible) {
+            if (this.crossX >= 0) {
+                g.drawLine(this.crossX, 0, this.crossX, getHeight());
+            }
+            if (this.crossY >= 0) {
+                g.drawLine(0, this.crossY, getWidth(), this.crossY);
+            }
         }
     }
 
@@ -325,19 +351,29 @@ public class PhotoPanel extends JPanel {
         private int y;
 
         @Override
+        public void mouseClicked(MouseEvent evt) {
+            if (evt.getClickCount() == 2) {
+                for (LayerDrawer drawer : PhotoPanel.this.layerDrawers.values()) {
+                    drawer.setVertical(PhotoPanel.this.crossX);
+                    drawer.setHorizontal(PhotoPanel.this.crossY);
+                }
+            }
+        }
+
+        @Override
         public void mousePressed(MouseEvent evt) {
             if (PhotoPanel.this.selectedLayerDrawer == null) {
                 return;
             }
 
             this.pt = evt.getPoint();
-            if (PhotoPanel.this.dragTarget != DragTargetType.PHOTO) {
-                this.x = PhotoPanel.this.selectedLayerDrawer.getOffset().x;
-                this.y = PhotoPanel.this.selectedLayerDrawer.getOffset().y;
-            }
-            else {
+            if ("PHOTO".equals(PhotoPanel.this.dragTarget)) {
                 this.x = PhotoPanel.this.offset.x;
                 this.y = PhotoPanel.this.offset.y;
+            }
+            else {
+                this.x = PhotoPanel.this.selectedLayerDrawer.getOffset().x;
+                this.y = PhotoPanel.this.selectedLayerDrawer.getOffset().y;
             }
             PhotoPanel.this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
@@ -358,12 +394,27 @@ public class PhotoPanel extends JPanel {
             int oy = (this.y + evt.getY() - this.pt.y);
 
             Point pt = new Point(ox, oy);
-            if (PhotoPanel.this.dragTarget != DragTargetType.PHOTO) {
-                PhotoPanel.this.selectedLayerDrawer.setOffset(pt);
-            }
-            else {
+            if ("PHOTO".equals(PhotoPanel.this.dragTarget)) {
                 PhotoPanel.this.setOffset(pt);
             }
+            else {
+                PhotoPanel.this.selectedLayerDrawer.setOffset(pt);
+            }
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent evt) {
+            PhotoPanel.this.crossX = evt.isControlDown() ? evt.getPoint().x : -1;
+            PhotoPanel.this.crossY = evt.isAltDown() ? evt.getPoint().y : -1;
+            PhotoPanel.this.repaint();
+        }
+
+        @Override
+        public void mouseExited(MouseEvent evt) {
+            PhotoPanel.this.crossX = -1;
+            PhotoPanel.this.crossY = -1;
+            PhotoPanel.this.repaint();
+
         }
     }
 }

@@ -41,4 +41,18 @@ public interface LayerDrawer {
     public boolean isEnabled();
 
     public void reset();
+
+    public void setHorizontal(int horizontal);
+
+    public int getHorizontal();
+
+    public void setVertical(int vertical);
+
+    public int getVertical();
+
+    public static Color contrastColor(Color color) {
+        double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
+        return y >= 128 ? Color.black : Color.white;
+    }
+
 }

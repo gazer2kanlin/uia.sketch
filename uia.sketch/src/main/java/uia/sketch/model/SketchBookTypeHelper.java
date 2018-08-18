@@ -56,6 +56,7 @@ public class SketchBookTypeHelper {
         photo.getLayers().getLayer().add(createLayer("GRID2", false, "180,180,180", 100));
         photo.getLayers().getLayer().add(createLayer("CIRCLE", false, "180,180,180", 100));
         photo.getLayers().getLayer().add(createLayer("TRIANGLE", false, "180,180,180", 100));
+        photo.getLayers().getLayer().add(createLayer("PERSPECTIVE", false, "180,180,180", 100));
         return photo;
 
     }

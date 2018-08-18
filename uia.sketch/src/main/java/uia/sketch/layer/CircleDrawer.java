@@ -1,4 +1,4 @@
-package uia.sketch;
+package uia.sketch.layer;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 
+import uia.sketch.LayerDrawer;
+import uia.sketch.PhotoPanel;
 import uia.sketch.model.SketchBookTypeHelper;
 import uia.sketch.model.xml.LayerType;
 
@@ -84,19 +86,11 @@ public class CircleDrawer implements LayerDrawer {
         this.layerName = layerName;
     }
 
-    /**
-     * Get enabled or not.
-     * @return Enabled.
-     */
     @Override
     public boolean isEnabled() {
         return this.enabled;
     }
 
-    /**
-     * Set enabled or not.
-     * @param enabled
-     */
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -114,19 +108,11 @@ public class CircleDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get offset.
-     * @return Offest.
-     */
     @Override
     public Point getOffset() {
         return this.offset;
     }
 
-    /**
-     * Set offset.
-     * @param offset Offset.
-     */
     @Override
     public void setOffset(Point offset) {
         if (offset == null || this.offset.equals(offset)) {
@@ -137,19 +123,11 @@ public class CircleDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get width.
-     * @return Width.
-     */
     @Override
     public int getWidth() {
         return this.width;
     }
 
-    /**
-     * Set width.
-     * @param width Width.
-     */
     @Override
     public void setWidth(int width) {
         if (this.width == width) {
@@ -159,19 +137,11 @@ public class CircleDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get line color.
-     * @return Line color.
-     */
     @Override
     public Color getLineColor() {
         return this.lineColor;
     }
 
-    /**
-     * Set line color.
-     * @param lineColor Line color.
-     */
     @Override
     public void setLineColor(Color lineColor) {
         if (this.lineColor.equals(lineColor)) {
@@ -181,28 +151,34 @@ public class CircleDrawer implements LayerDrawer {
         repaint();
     }
 
-    /**
-     * Get photo panel.
-     * @return Photo panel.
-     */
     @Override
     public PhotoPanel getPhotoPanel() {
         return this.panel;
     }
 
-    /**
-     * Set photo panel.
-     * @param panel Photo panel.
-     */
     @Override
     public void setPhotoPanel(PhotoPanel panel) {
         this.panel = panel;
     }
 
-    /**
-     * Paint grid.
-     * @param g Graphics from photo panel.
-     */
+    @Override
+    public void setHorizontal(int horizontal) {
+    }
+
+    @Override
+    public int getHorizontal() {
+        return -1;
+    }
+
+    @Override
+    public void setVertical(int vertical) {
+    }
+
+    @Override
+    public int getVertical() {
+        return -1;
+    }
+
     @Override
     public void paint(Graphics g) {
         if (this.panel == null || !this.enabled) {
