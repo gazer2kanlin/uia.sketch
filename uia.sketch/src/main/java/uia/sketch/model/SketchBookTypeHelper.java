@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -44,7 +44,8 @@ public class SketchBookTypeHelper {
 
     public static PhotoType createPhoto(File file) {
         PhotoType photo = new PhotoType();
-        photo.setPath(file == null ? null : file.getAbsolutePath());
+        photo.setPath(file == null ? null : "photo/" + file.getName());
+        // photo.setPath(file == null ? null : file.getAbsolutePath());
         photo.setName(file == null ? "Undefined" : file.getName());
         photo.setOffset("0,0");
         photo.setZoom(1.0d);
@@ -82,13 +83,7 @@ public class SketchBookTypeHelper {
     }
 
     public static SketchBookType load(File file) throws Exception {
-        Scanner freader = new Scanner(file);
-        StringBuilder content = new StringBuilder();
-        while (freader.hasNextLine()) {
-            content.append(freader.nextLine().trim());
-        }
-        freader.close();
-        return load(content.toString());
+    	return load(new FileInputStream(file));
     }
 
     public static SketchBookType load(InputStream stream) throws Exception {

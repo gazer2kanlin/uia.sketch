@@ -5,6 +5,10 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+import java.util.UUID;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -97,6 +101,7 @@ public class FileNaviPanel extends JPanel {
             }
         }
         catch (Exception ex) {
+        	ex.printStackTrace();
             JOptionPane.showMessageDialog(this, file.getAbsolutePath() + " can't be opened.", "Sketch book", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -130,7 +135,23 @@ public class FileNaviPanel extends JPanel {
         fc.setCurrentDirectory(this.lastFile);
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            this.lastFile = fc.getSelectedFile();
+        	File sourceFile = fc.getSelectedFile();
+            if(!sourceFile.exists()) {
+            	return;
+            }
+            
+            String ext = sourceFile.getName().substring(sourceFile.getName().lastIndexOf(".") - 1);
+            this.lastFile = new File("photo/" + UUID.randomUUID().toString() + ext);
+            try(FileInputStream source = new FileInputStream(sourceFile)) {
+            	try(FileOutputStream dest = new FileOutputStream(this.lastFile) ) {
+            		FileChannel sourceChannel = source.getChannel();
+            		FileChannel destChannel = dest.getChannel();
+                    destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            	}
+            }
+            catch(Exception ex) {
+            	return;
+            }
 
             PhotoType photo = SketchBookTypeHelper.createPhoto(this.lastFile);
             PhotoFile pf = new PhotoFile(photo);

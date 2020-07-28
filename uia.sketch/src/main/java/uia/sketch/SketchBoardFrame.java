@@ -75,6 +75,11 @@ public class SketchBoardFrame extends JFrame {
                 Locale.setDefault(new Locale(args[0]));
                 Resources.LOCALE = Locale.getDefault();
             }
+            
+            File photoDir = new File("photo");
+            if(!photoDir.exists()) {
+            	System.out.println("create photo folder:" +photoDir.mkdir());
+            }
 
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             String fontName = "Monospace";
