@@ -171,25 +171,7 @@ public class PerspectiveDrawer implements LayerDrawer {
     }
 
     @Override
-    public void setHorizontal(int horizontal) {
-        this.boundY = horizontal < 0 ? null : horizontal;
-        repaint();
-    }
-
-    @Override
-    public int getHorizontal() {
-        return this.boundY == null ? -1 : this.boundY;
-    }
-
-    @Override
-    public void setVertical(int vertical) {
-        this.boundX = vertical < 0 ? null : vertical;
-        repaint();
-    }
-
-    @Override
-    public int getVertical() {
-        return this.boundX == null ? -1 : this.boundX;
+    public void doubleClick(int x, int y) {
     }
 
     @Override

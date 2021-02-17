@@ -2,6 +2,7 @@ package uia.sketch;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -13,7 +14,10 @@ import java.io.File;
 import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 import uia.sketch.layer.CircleDrawer;
 import uia.sketch.layer.GridDrawer;
@@ -60,6 +64,8 @@ public class PhotoPanel extends JPanel {
     private int crossX;
 
     private int crossY;
+    
+    private JColorChooser colorChooser;
 
     /**
      * Constructor.
@@ -74,6 +80,23 @@ public class PhotoPanel extends JPanel {
         this.offset = new Point(0, 0);
         this.zoom = 1.0d;
 
+        this.colorChooser = new JColorChooser(Color.red);
+        this.colorChooser.setPreviewPanel(new JPanel());
+        for (AbstractColorChooserPanel p : this.colorChooser.getChooserPanels()) {
+            String displayName = p.getDisplayName();
+            switch (displayName.toUpperCase()) {
+                case "HSV":
+                	this.colorChooser.removeChooserPanel(p);
+                    break;
+                case "CMYK":
+                	this.colorChooser.removeChooserPanel(p);
+                    break;
+                case "SWATCHES":
+                	this.colorChooser.removeChooserPanel(p);
+                    break;
+            }
+        }        this.colorChooser.setPreviewPanel(null);
+        
         GridDrawer grid1LayerDrawer = new GridDrawer();
         grid1LayerDrawer.setLayerName("GRID1");
         grid1LayerDrawer.setPhotoPanel(this);
@@ -318,6 +341,17 @@ public class PhotoPanel extends JPanel {
             this.selectedLayerDrawer.setEnabled(true);
         }
     }
+    
+    public void openColorPicker() {
+        Dimension dim = this.colorChooser.getPreferredSize();
+        JDialog dialog = new JDialog();
+        dialog.setLocationRelativeTo(null); 
+        dialog.setPreferredSize(new Dimension(dim.width, dim.height + 40));
+        dialog.setSize(new Dimension(dim.width, dim.height + 40));
+        dialog.add(this.colorChooser);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -352,10 +386,20 @@ public class PhotoPanel extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent evt) {
-            if (evt.getClickCount() == 2) {
+            if (evt.getClickCount() == 1) {
+            	/**
+				try {
+					// very bad
+                    Color color = new Robot().getPixelColor(evt.getX(), evt.getY()); 
+                    PhotoPanel.this.colorChooser.setColor(color);
+                	PhotoPanel.this.colorChooser.setBackground(color);
+				} catch (AWTException e) {
+					
+				}
+				*/
+            } else if (evt.getClickCount() == 2) {
                 for (LayerDrawer drawer : PhotoPanel.this.layerDrawers.values()) {
-                    drawer.setVertical(PhotoPanel.this.crossX);
-                    drawer.setHorizontal(PhotoPanel.this.crossY);
+                    drawer.doubleClick(evt.getX(),  evt.getY());
                 }
             }
         }

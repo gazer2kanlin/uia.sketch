@@ -65,6 +65,8 @@ public class SketchBoardFrame extends JFrame {
 
     private JMenuItem redoMenuItem;
 
+    private JMenuItem colorMenuItem;
+
     /**
      *
      * @param args
@@ -237,6 +239,11 @@ public class SketchBoardFrame extends JFrame {
         this.redoMenuItem = new JMenuItem(Resources.getString("menu.Redo"));
         this.redoMenuItem.setEnabled(false);
         editMenu.add(this.redoMenuItem);
+
+        this.colorMenuItem = new JMenuItem(Resources.getString("menu.Color"));
+        this.colorMenuItem.addActionListener(evt -> SketchBoardFrame.this.photoPanel.openColorPicker());
+        this.colorMenuItem.setEnabled(false);
+        editMenu.add(this.colorMenuItem);
 
         // Menu Bar> Help
         JMenu helpMenu = new JMenu(Resources.getString("menu.Help"));

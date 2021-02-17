@@ -42,13 +42,7 @@ public interface LayerDrawer {
 
     public void reset();
 
-    public void setHorizontal(int horizontal);
-
-    public int getHorizontal();
-
-    public void setVertical(int vertical);
-
-    public int getVertical();
+    public void doubleClick(int x, int y);
 
     public static Color contrastColor(Color color) {
         double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;

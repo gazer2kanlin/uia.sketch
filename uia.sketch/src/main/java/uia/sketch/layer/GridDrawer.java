@@ -172,21 +172,8 @@ public class GridDrawer implements LayerDrawer {
     }
 
     @Override
-    public void setHorizontal(int horizontal) {
-    }
-
-    @Override
-    public int getHorizontal() {
-        return -1;
-    }
-
-    @Override
-    public void setVertical(int vertical) {
-    }
-
-    @Override
-    public int getVertical() {
-        return -1;
+    public void doubleClick(int x, int y) {
+    	this.offset = new Point(x, y);
     }
 
     @Override
